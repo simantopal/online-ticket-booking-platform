@@ -5,20 +5,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { Eye, EyeSlash } from "@gravity-ui/icons";
-import { signIn, signUp } from "@/lib/auth-client";
+import { signIn } from "@/lib/auth-client";
 import { toast } from "react-toastify";
 
-export default function SignupPage() {
+export default function SigninPage() {
   const router = useRouter();
 
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-    name: "",
     email: "",
     password: "",
-    image: "",
   });
 
   const handleChange = (e) => {
@@ -34,19 +32,17 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const { error } = await signUp.email({
-        name: form.name,
+      const { error } = await signIn.email({
         email: form.email,
         password: form.password,
-        image: form.image,
       });
 
       if (error) {
-        toast.error(error.message || "Signup failed");
+        toast.error(error.message || "Invalid credentials");
         return;
       }
 
-      toast.success("Account created successfully!");
+      toast.success("Login successful!");
 
       setTimeout(() => {
         router.push("/");
@@ -81,39 +77,14 @@ export default function SignupPage() {
       {/* Card */}
       <div className="relative w-full max-w-md p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl">
         <h1 className="text-3xl font-bold text-white text-center">
-          Create Account
+          Welcome Back
         </h1>
 
         <p className="text-zinc-400 text-center text-sm mt-2">
-          Join TicketBari and book your journey
+          Sign in to your TicketBari account
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          
-          {/* Name */}
-          <div>
-            <label className="text-sm text-zinc-400">Full Name</label>
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-white/10 text-white outline-none focus:border-indigo-500"
-              required
-            />
-          </div>
-
-          {/* Image */}
-          <div>
-            <label className="text-sm text-zinc-400">Profile Image</label>
-            <input
-              name="image"
-              value={form.image}
-              onChange={handleChange}
-              placeholder="Paste image URL (optional)"
-              className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-white/10 text-white outline-none focus:border-indigo-500"
-            />
-          </div>
 
           {/* Email */}
           <div>
@@ -149,9 +120,19 @@ export default function SignupPage() {
                 onClick={() => setShowPass(!showPass)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
               >
-                {/* {showPass ? <EyeSlash /> : <Eye />} */}
+                {showPass ? <EyeSlash /> : <Eye />}
               </button>
             </div>
+          </div>
+
+          {/* Forgot Password */}
+          <div className="flex justify-end">
+            <Link
+              href="/forgot-password"
+              className="text-sm text-indigo-400 hover:underline"
+            >
+              Forgot Password?
+            </Link>
           </div>
 
           {/* Submit */}
@@ -163,21 +144,21 @@ export default function SignupPage() {
             {loading ? (
               <>
                 <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Creating Account...
+                Signing In...
               </>
             ) : (
-              "Sign Up"
+              "Sign In"
             )}
           </button>
 
           {/* Footer */}
           <p className="text-center text-sm text-zinc-400">
-            Already have an account?{" "}
+            Do not have an account?{" "}
             <Link
-              href="/auth/signin"
+              href="/auth/signup"
               className="text-indigo-400 hover:underline"
             >
-              Sign In
+              Sign Up
             </Link>
           </p>
 
@@ -188,7 +169,7 @@ export default function SignupPage() {
             <div className="h-px flex-1 bg-white/10" />
           </div>
 
-          {/* Google */}
+          {/* Google Sign In */}
           <button
             type="button"
             onClick={handleGoogleLogin}
