@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Ticket, Envelope, Handset, LogoFacebook } from "@gravity-ui/icons";
+import Image from "next/image";
 
 export default function Footer() {
     return (
@@ -14,8 +15,14 @@ export default function Footer() {
                             href="/"
                             className="mb-4 flex items-center gap-2 text-2xl font-bold text-indigo-500"
                         >
-                            <Ticket className="size-6 text-indigo-500" />
-                            TicketBari
+                            <Image
+                                src="/logo.png"
+                                alt="TicketBari Logo"
+                                width={150}
+                                height={100}
+                                className="object-contain w-60"
+                            />
+
                         </Link>
 
                         <p className="text-sm leading-6 text-zinc-400">

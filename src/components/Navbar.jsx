@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bars, Xmark, House, Ticket, Rectangles4, Person, ArrowRightFromSquare, ChevronDown} from "@gravity-ui/icons";
+import { Bars, Xmark, House, Ticket, Rectangles4, Person, ArrowRightFromSquare, ChevronDown } from "@gravity-ui/icons";
+import Image from "next/image";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -45,8 +46,17 @@ export default function Navbar() {
           href="/"
           className="flex items-center gap-2 font-bold text-white"
         >
-          <Ticket className="size-6 text-indigo-500" />
-          <span className="text-2xl text-indigo-600">TicketBari</span>
+          <Image
+            src="/logo.png"
+            alt="TicketBari Logo"
+            width={150}
+            height={100}
+            className="object-contain w-40"
+          />
+{/* 
+          <span className="text-2xl text-indigo-600">
+            TicketBari
+          </span> */}
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -64,9 +74,8 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2 font-medium transition hover:text-white ${
-                  isActive ? "text-blue-500" : "text-zinc-300"
-                }`}
+                className={`flex items-center gap-2 font-medium transition hover:text-white ${isActive ? "text-blue-500" : "text-zinc-300"
+                  }`}
               >
                 <Icon className="size-4" />
                 {item.label}
@@ -187,9 +196,8 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 rounded-xl px-4 py-3 transition hover:bg-zinc-800 hover:text-white ${
-                    isActive ? "text-blue-500" : "text-zinc-300"
-                  }`}
+                  className={`flex items-center gap-3 rounded-xl px-4 py-3 transition hover:bg-zinc-800 hover:text-white ${isActive ? "text-blue-500" : "text-zinc-300"
+                    }`}
                 >
                   <Icon className="size-4" />
                   {item.label}
