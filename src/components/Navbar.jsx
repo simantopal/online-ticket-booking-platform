@@ -2,50 +2,47 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Bars, Xmark, House, Ticket, Rectangles4, Person, ArrowRightFromSquare, ChevronDown } from "@gravity-ui/icons";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  Bars,
+  Xmark,
+  House,
+  Ticket,
+  Rectangles4,
+  Person,
+  ArrowRightFromSquare,
+  ChevronDown,
+} from "@gravity-ui/icons";
 import Image from "next/image";
+import { useSession, signOut } from "@/lib/auth-client";
+import { Button } from "@heroui/react";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const router = useRouter();
   const pathname = usePathname();
 
-  const isLoggedIn = false;
+  const { data: session, isPending } = useSession();
+  const user = session?.user;
 
-  const user = {
-    name: "Simanto Paul",
-    image: "https://i.pravatar.cc/150?img=12",
-  };
+  const isLoggedIn = !!user;
+
+  if (isPending) return null;
 
   const navLinks = [
-    {
-      icon: House,
-      label: "Home",
-      href: "/",
-    },
-    {
-      icon: Ticket,
-      label: "All Tickets",
-      href: "/tickets",
-    },
-    {
-      icon: Rectangles4,
-      label: "Dashboard",
-      href: "/dashboard",
-      private: true,
-    },
+    { icon: House, label: "Home", href: "/" },
+    { icon: Ticket, label: "All Tickets", href: "/tickets" },
+    { icon: Rectangles4, label: "Dashboard", href: "/dashboard", private: true },
   ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
 
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-bold text-white"
-        >
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 font-bold text-white">
           <Image
             src="/logo.png"
             alt="TicketBari Logo"
@@ -55,6 +52,7 @@ export default function Navbar() {
           />
         </Link>
 
+        {/* Nav Links */}
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((item) => {
             if (item.private && !isLoggedIn) return null;
@@ -70,8 +68,9 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2 font-medium transition hover:text-white ${isActive ? "text-blue-500" : "text-zinc-300"
-                  }`}
+                className={`flex items-center gap-2 font-medium transition hover:text-white ${
+                  isActive ? "text-blue-500" : "text-zinc-300"
+                }`}
               >
                 <Icon className="size-4" />
                 {item.label}
@@ -80,7 +79,7 @@ export default function Navbar() {
           })}
         </nav>
 
-
+        {/* Desktop Auth */}
         <div className="hidden md:flex">
           {!isLoggedIn ? (
             <div className="flex items-center gap-3">
@@ -104,14 +103,16 @@ export default function Navbar() {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 transition hover:bg-zinc-800"
               >
-                <img
-                  src={user.image}
-                  alt={user.name}
-                  className="h-9 w-9 rounded-full object-cover"
-                />
+                {/* <Image
+                  src={user?.image || "/avatar.png"}
+                  alt={user?.name || "User"}
+                  width={32}
+                  height={32}
+                  className="rounded-full object-cover"
+                /> */}
 
-                <span className="font-medium text-white">
-                  {user.name}
+                <span className="text-white font-medium">
+                  Welcome back! {user?.name}
                 </span>
 
                 <ChevronDown className="size-4 text-zinc-400" />
@@ -128,13 +129,14 @@ export default function Navbar() {
                   </Link>
 
                   <button
-                    className="flex w-full items-center gap-3 px-4 py-3 text-left text-red-400 transition hover:bg-red-500/10"
-                    onClick={() => {
-                      console.log("logout");
+                    onClick={async () => {
+                      await signOut();
+                      router.refresh();
                     }}
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left text-red-400 transition hover:bg-red-500/10"
                   >
                     <ArrowRightFromSquare className="size-4" />
-                    Logout
+                    SignOut
                   </button>
                 </div>
               )}
@@ -142,6 +144,7 @@ export default function Navbar() {
           )}
         </div>
 
+        {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="text-white md:hidden"
@@ -154,29 +157,34 @@ export default function Navbar() {
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {mobileOpen && (
         <div className="border-t border-zinc-800 bg-zinc-950 md:hidden">
           <div className="space-y-2 p-4">
+
+            {/* User */}
             {isLoggedIn && (
               <div className="mb-4 flex items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
-                <img
-                  src={user.image}
-                  alt={user.name}
-                  className="h-11 w-11 rounded-full object-cover"
-                />
+                {/* <Image
+                  src={user?.image || "/avatar.png"}
+                  alt={user?.name || "User"}
+                  width={44}
+                  height={44}
+                  className="rounded-full object-cover"
+                /> */}
 
                 <div>
                   <h3 className="font-semibold text-white">
-                    {user.name}
+                    {user?.name}
                   </h3>
-
                   <p className="text-sm text-zinc-400">
-                    Welcome back
+                    {user?.email}
                   </p>
                 </div>
               </div>
             )}
 
+            {/* Links */}
             {navLinks.map((item) => {
               if (item.private && !isLoggedIn) return null;
 
@@ -192,8 +200,9 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 rounded-xl px-4 py-3 transition hover:bg-zinc-800 hover:text-white ${isActive ? "text-blue-500" : "text-zinc-300"
-                    }`}
+                  className={`flex items-center gap-3 rounded-xl px-4 py-3 transition hover:bg-zinc-800 hover:text-white ${
+                    isActive ? "text-blue-500" : "text-zinc-300"
+                  }`}
                 >
                   <Icon className="size-4" />
                   {item.label}
@@ -201,39 +210,35 @@ export default function Navbar() {
               );
             })}
 
+            {/* Auth */}
             {!isLoggedIn ? (
               <div className="space-y-2 pt-3">
                 <Link
-                  href="/login"
+                  href="/auth/signin"
                   className="block rounded-xl border border-zinc-700 px-4 py-3 text-center text-zinc-300"
                 >
-                  Login
+                  SignIn
                 </Link>
 
                 <Link
-                  href="/register"
+                  href="/auth/signup"
                   className="block rounded-xl bg-blue-600 px-4 py-3 text-center font-medium text-white"
                 >
                   Register
                 </Link>
               </div>
             ) : (
-              <>
-                <Link
-                  href="/profile"
-                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-zinc-300 transition hover:bg-zinc-800 hover:text-white"
-                >
-                  <Person className="size-4" />
-                  My Profile
-                </Link>
-
-                <button
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-red-400 transition hover:bg-red-500/10"
-                >
-                  <ArrowRightFromSquare className="size-4" />
-                  Logout
-                </button>
-              </>
+              <button
+                onClick={async () => {
+                  await signOut();
+                  router.refresh();
+                  setMobileOpen(false);
+                }}
+                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-red-400 transition hover:bg-red-500/10"
+              >
+                <ArrowRightFromSquare className="size-4" />
+                SignOut
+              </button>
             )}
           </div>
         </div>

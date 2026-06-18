@@ -1,3 +1,4 @@
+import AdvertisementSection from "@/components/AdvertisementSection";
 import Banner from "@/components/Banner";
 import Image from "next/image";
 
@@ -6,6 +7,7 @@ export default function Home() {
     <div className="items-center justify-center bg-zinc-50 font-sans dark:bg-black">
      
       <Banner />
+      <AdvertisementSection/>
 
     </div>
   );

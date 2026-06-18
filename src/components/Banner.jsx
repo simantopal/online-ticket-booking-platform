@@ -17,7 +17,7 @@ export default function Banner() {
       <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-20 lg:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div className="grid items-center gap-12 lg:grid-cols-2 text-center justify-center lg:justify-start lg:text-start">
           
           {/* Left Content */}
           <div>
@@ -38,7 +38,7 @@ export default function Banner() {
               across Bangladesh. Fast, secure and hassle-free booking.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-8 flex flex-wrap gap-4 justify-center items-center lg:justify-start lg:text-start">
               <button className="rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white transition hover:bg-indigo-700">
                 Book Tickets
               </button>
@@ -49,7 +49,7 @@ export default function Banner() {
             </div>
 
             {/* Stats */}
-            <div className="mt-10 flex flex-wrap gap-8">
+            <div className="mt-10 flex flex-wrap gap-8 lg:justify-start lg:text-start justify-center items-center">
               <div>
                 <h3 className="text-3xl font-bold text-white">
                   50K+
