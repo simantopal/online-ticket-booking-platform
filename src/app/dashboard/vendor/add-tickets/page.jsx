@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import Image from "next/image";
+import { addTicket } from "@/lib/actions/tickets";
+import { toast } from "react-toastify";
+import { redirect } from "next/navigation";
 
 const availablePerks = [
     "AC",
@@ -57,22 +60,31 @@ export default function AddTicketPage() {
             from: form.from.value,
             to: form.to.value,
             transportType: form.transportType.value,
-            price: form.price.value,
-            quantity: form.quantity.value,
+            price: Number(form.price.value),
+            quantity: Number(form.quantity.value),
             departureDateTime: form.departureDateTime.value,
             perks: selectedPerks,
+
+            // image: imageUrl, // imgbb থেকে পাওয়া URL
+
             vendorName: user?.name,
             vendorEmail: user?.email,
+
+            status: "Pending",
+            createdAt: new Date(),
         };
 
-        console.log(ticketData);
+        const res = await addTicket(ticketData);
+        if (res.insertedId) {
+            toast.success("Ticket Add successfully");
+            e.target.reset();
+            redirect("/dashboard/vendor");
+        }
 
         // TODO:
         // 1. Upload image to imgbb
         // 2. Get image URL
         // 3. Save ticket to database
-
-        alert("Ticket data ready for submission!");
     };
 
     return (
@@ -107,7 +119,7 @@ export default function AddTicketPage() {
                                 type="text"
                                 name="title"
                                 required
-                                placeholder="Dhaka to Cox's Bazar"
+                                placeholder="Dhaka Express"
                                 className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-indigo-500"
                             />
                         </div>
@@ -156,7 +168,6 @@ export default function AddTicketPage() {
                                 <option value="Bus">Bus</option>
                                 <option value="Train">Train</option>
                                 <option value="Flight">Flight</option>
-                                <option value="Launch">Launch</option>
                             </select>
                         </div>
                     </div>

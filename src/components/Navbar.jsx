@@ -33,7 +33,7 @@ export default function Navbar() {
   const navLinks = [
     { icon: House, label: "Home", href: "/" },
     { icon: Ticket, label: "All Tickets", href: "/tickets" },
-    { icon: Rectangles4, label: "Dashboard", href: "/dashboard", private: true },
+    { icon: Rectangles4, label: "Dashboard", href: "/dashboard/vendor", private: true },
   ];
 
   return (
