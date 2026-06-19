@@ -7,12 +7,14 @@ import { FcGoogle } from "react-icons/fc";
 import { Eye, EyeSlash } from "@gravity-ui/icons";
 import { signIn, signUp } from "@/lib/auth-client";
 import { toast } from "react-toastify";
+import { Label, Radio, RadioGroup } from "@heroui/react";
 
 export default function SignupPage() {
   const router = useRouter();
 
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState("customer");
 
   const [form, setForm] = useState({
     name: "",
@@ -39,6 +41,7 @@ export default function SignupPage() {
         email: form.email,
         password: form.password,
         image: form.image,
+        role
       });
 
       if (error) {
@@ -89,7 +92,7 @@ export default function SignupPage() {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          
+
           {/* Name */}
           <div>
             <label className="text-sm text-zinc-400">Full Name</label>
@@ -152,6 +155,28 @@ export default function SignupPage() {
                 {/* {showPass ? <EyeSlash /> : <Eye />} */}
               </button>
             </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <Label className="text-zinc-400">Role</Label>
+            <RadioGroup defaultValue="customer" name="role" onChange={value => setRole(value)} orientation="horizontal">
+              <Radio value="customer">
+                <Radio.Content>
+                  <Radio.Control>
+                    <Radio.Indicator />
+                  </Radio.Control>
+                  Customer
+                </Radio.Content>
+              </Radio>
+              <Radio value="vendor">
+                <Radio.Content>
+                  <Radio.Control>
+                    <Radio.Indicator />
+                  </Radio.Control>
+                  Vendor
+                </Radio.Content>
+              </Radio>            
+            </RadioGroup>
           </div>
 
           {/* Submit */}

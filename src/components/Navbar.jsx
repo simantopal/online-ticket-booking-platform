@@ -15,7 +15,6 @@ import {
 } from "@gravity-ui/icons";
 import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
-import { Button } from "@heroui/react";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
