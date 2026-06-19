@@ -107,7 +107,7 @@ export default function SignupPage() {
           </div>
 
           {/* Image */}
-          {/* <div>
+          <div>
             <label className="text-sm text-zinc-400">Profile Image</label>
             <input
               name="image"
@@ -116,7 +116,7 @@ export default function SignupPage() {
               placeholder="Paste image URL (optional)"
               className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-white/10 text-white outline-none focus:border-indigo-500"
             />
-          </div> */}
+          </div>
 
           {/* Email */}
           <div>

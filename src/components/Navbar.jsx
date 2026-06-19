@@ -102,13 +102,13 @@ export default function Navbar() {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 transition hover:bg-zinc-800"
               >
-                {/* <Image
+                <Image
                   src={user?.image || "/avatar.png"}
                   alt={user?.name || "User"}
                   width={32}
                   height={32}
                   className="rounded-full object-cover"
-                /> */}
+                />
 
                 <span className="text-white font-medium">
                   Welcome back! {user?.name}
@@ -120,7 +120,7 @@ export default function Navbar() {
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 shadow-2xl">
                   <Link
-                    href="/profile"
+                    href="/dashboard/vendor/profile"
                     className="flex items-center gap-3 px-4 py-3 text-zinc-300 transition hover:bg-zinc-800 hover:text-white"
                   >
                     <Person className="size-4" />
@@ -164,13 +164,13 @@ export default function Navbar() {
             {/* User */}
             {isLoggedIn && (
               <div className="mb-4 flex items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
-                {/* <Image
+                <Image
                   src={user?.image || "/avatar.png"}
                   alt={user?.name || "User"}
                   width={44}
                   height={44}
                   className="rounded-full object-cover"
-                /> */}
+                />
 
                 <div>
                   <h3 className="font-semibold text-white">

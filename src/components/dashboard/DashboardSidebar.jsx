@@ -1,10 +1,11 @@
 import { Bars, Ticket, Envelope, PersonPencil, SquarePlus, TagDollar } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
+import Link from "next/link";
 
 export function DashboardSidebar() {
     const navItems = [
         { icon: PersonPencil, label: "Profile", href: "/dashboard/vendor/profile" },
-        { icon: SquarePlus, label: "Add Ticket", href: "/dashboard/vendor/add-ticket" },
+        { icon: SquarePlus, label: "Add Ticket", href: "/dashboard/vendor/add-tickets" },
         { icon: Ticket, label: "My Added Tickets", href: "/dashboard/vendor/my-tickets" },
         { icon: Envelope, label: "Requested Bookings", href: "/dashboard/vendor/bookings" },
         { icon: TagDollar, label: "Revenue Overview", href: "/dashboard/vendor/revenue" },
@@ -12,14 +13,15 @@ export function DashboardSidebar() {
 
     const navContent = <nav className="flex flex-col gap-1">
         {navItems.map((item) => (
-            <button
+            <Link
                 key={item.label}
                 className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-default"
                 type="button"
+                href={item.href}
             >
                 <item.icon className="size-5 text-muted" />
                 {item.label}
-            </button>
+            </Link>
         ))}
     </nav>
 

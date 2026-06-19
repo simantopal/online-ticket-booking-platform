@@ -21,7 +21,7 @@ export default function MyTicketsPage() {
 
       try {
         const data = await getVendorTickets(user.email);
-        setTickets(data);        
+        setTickets(data);
       } catch (error) {
         console.error("Failed to load tickets:", error);
       } finally {
@@ -85,11 +85,10 @@ export default function MyTicketsPage() {
               {/* Image */}
               <div className="relative h-56">
                 {ticket.image ? (
-                  <Image
+                  <img
                     src={ticket.image}
                     alt={ticket.title}
-                    fill
-                    className="object-cover"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center bg-zinc-800 text-zinc-500">
@@ -155,11 +154,10 @@ export default function MyTicketsPage() {
                 <div className="mt-6 flex gap-3">
                   <Link
                     href={`/dashboard/vendor/my-tickets/${ticket._id}`}
-                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${
-                      ticket.status === "Rejected"
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${ticket.status === "Rejected"
                         ? "pointer-events-none cursor-not-allowed bg-zinc-800 text-zinc-500"
                         : "bg-blue-600 text-white hover:bg-blue-500"
-                    }`}
+                      }`}
                   >
                     <Pencil className="h-4 w-4" />
                     Update
@@ -167,11 +165,10 @@ export default function MyTicketsPage() {
 
                   <button
                     disabled={ticket.status === "Rejected"}
-                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${
-                      ticket.status === "Rejected"
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${ticket.status === "Rejected"
                         ? "cursor-not-allowed bg-zinc-800 text-zinc-500"
                         : "bg-red-800 text-white hover:bg-red-700"
-                    }`}
+                      }`}
                   >
                     <TrashBin className="h-4 w-4" />
                     Delete

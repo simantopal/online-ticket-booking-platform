@@ -21,6 +21,8 @@ export default function AddTicketPage() {
 
     const [selectedPerks, setSelectedPerks] = useState([]);
     const [imagePreview, setImagePreview] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
+    const [uploading, setUploading] = useState(false);
 
     if (isPending) {
         return (
@@ -42,11 +44,33 @@ export default function AddTicketPage() {
         }
     };
 
-    const handleImagePreview = (e) => {
+    const handleImagePreview = async (e) => {
         const file = e.target.files?.[0];
+        if (!file) return;
 
-        if (file) {
-            setImagePreview(URL.createObjectURL(file));
+        // Local Preview
+        setImagePreview(URL.createObjectURL(file));
+
+        try {
+            setUploading(true);
+            const formData = new FormData();
+            formData.append("image", file);
+            const res = await fetch(
+                `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_API}`,
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+            const data = await res.json();
+
+            if (data.success) {
+                setImageUrl(data.data.url);
+            }
+        } catch (error) {
+            console.error("Image upload failed:", error);
+        } finally {
+            setUploading(false);
         }
     };
 
@@ -65,7 +89,7 @@ export default function AddTicketPage() {
             departureDateTime: form.departureDateTime.value,
             perks: selectedPerks,
 
-            // image: imageUrl, // imgbb থেকে পাওয়া URL
+            image: imageUrl, // imgbb থেকে পাওয়া URL
 
             vendorName: user?.name,
             vendorEmail: user?.email,
@@ -264,6 +288,12 @@ export default function AddTicketPage() {
                             onChange={handleImagePreview}
                             className="w-full text-zinc-400"
                         />
+
+                        {uploading && (
+                            <p className="mt-3 text-sm text-blue-400">
+                                Uploading image...
+                            </p>
+                        )}
 
                         {imagePreview && (
                             <div className="mt-5">
