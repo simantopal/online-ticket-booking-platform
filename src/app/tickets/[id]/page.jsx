@@ -1,27 +1,90 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
 
 export default function TicketDetailsPage() {
   const { id } = useParams();
+  const router = useRouter();
+
+  const { data: session, isPending } = useSession();
 
   const [ticket, setTicket] = useState(null);
   const [qty, setQty] = useState(1);
   const [open, setOpen] = useState(false);
+  const [loadingTicket, setLoadingTicket] = useState(true);
 
+  // LIVE COUNTDOWN STATE
+  const [countdown, setCountdown] = useState(null);
+
+  // AUTH CHECK
   useEffect(() => {
-    fetch(`http://localhost:5000/api/tickets/${id}`)
-      .then((res) => res.json())
-      .then(setTicket);
+    if (!isPending && !session) {
+      router.replace("/auth/signin");
+    }
+  }, [session, isPending, router]);
+
+  // FETCH TICKET
+  useEffect(() => {
+    const fetchTicket = async () => {
+      if (!id) return;
+
+      try {
+        setLoadingTicket(true);
+
+        const res = await fetch(
+          `http://localhost:5000/api/tickets/${id}`
+        );
+
+        const data = await res.json();
+        setTicket(data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoadingTicket(false);
+      }
+    };
+
+    fetchTicket();
   }, [id]);
 
-  if (!ticket)
+  // LIVE COUNTDOWN EFFECT
+  useEffect(() => {
+    if (!ticket?.departureDateTime) return;
+
+    const target = new Date(ticket.departureDateTime).getTime();
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        setCountdown(null);
+        clearInterval(interval);
+        return;
+      }
+
+      setCountdown({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [ticket]);
+
+  if (isPending || loadingTicket) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-white">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-950 via-black to-zinc-900 text-white">
         Loading...
       </div>
     );
+  }
+
+  if (!session || !ticket) return null;
 
   const isExpired =
     new Date(ticket.departureDateTime) < new Date();
@@ -30,95 +93,93 @@ export default function TicketDetailsPage() {
 
   const disabled = isExpired || isSoldOut;
 
-  const diff = new Date(ticket.departureDateTime) - new Date();
-
-  const countdown = diff > 0
-    ? {
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / (1000 * 60)) % 60),
-        seconds: Math.floor((diff / 1000) % 60),
-      }
-    : null;
-
   const handleBooking = async () => {
-    if (qty < 1 || qty > ticket.quantity) return;
+    if (qty < 1 || qty > ticket.quantity) {
+      alert("Invalid quantity");
+      return;
+    }
 
-    await fetch("http://localhost:5000/api/bookings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ticketId: ticket._id,
-        quantity: qty,
-        status: "pending",
-      }),
-    });
+    try {
+      await fetch("http://localhost:5000/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ticketId: ticket._id,
+          quantity: qty,
+          status: "pending",
+          userEmail: session.user.email,
+        }),
+      });
 
-    setOpen(false);
+      setOpen(false);
+      alert("Booking successful!");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-900 flex items-center justify-center p-6">
 
-      <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden grid md:grid-cols-2">
+      {/* CARD */}
+      <div className="w-full max-w-6xl overflow-hidden rounded-3xl shadow-2xl border border-white/10 backdrop-blur-xl bg-white/90 grid md:grid-cols-2">
 
-        {/* LEFT IMAGE */}
-        <div className="relative h-full min-h-[500px]">
+        {/* IMAGE */}
+        <div className="relative min-h-[500px]">
           <img
             src={ticket.image}
+            alt={ticket.title}
             className="h-full w-full object-cover"
           />
 
-          <div className="absolute top-4 left-4 bg-blue-600 text-white px-4 py-1 rounded-full text-xs">
+          <div className="absolute left-4 top-4 rounded-full bg-blue-600/90 px-4 py-1 text-xs text-white backdrop-blur">
             {ticket.transportType}
           </div>
         </div>
 
-        {/* RIGHT CONTENT */}
+        {/* CONTENT */}
         <div className="p-8 text-black">
 
-          {/* TITLE */}
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-3xl font-bold tracking-tight">
             {ticket.title}
           </h1>
 
-          <p className="text-gray-500 mt-1">
+          <p className="mt-2 text-gray-600">
             {ticket.from} → {ticket.to}
           </p>
 
           {/* COUNTDOWN */}
-          <div className="mt-6">
-            <p className="text-sm text-gray-500 mb-2">
+          <div className="mt-6 p-4 rounded-xl bg-gray-100 border">
+            <p className="mb-2 text-sm text-gray-500">
               Departure Countdown
             </p>
 
-            {countdown && !isExpired ? (
-              <div className="text-green-600 font-bold text-lg">
+            {countdown ? (
+              <div className="text-lg font-bold text-green-600">
                 {countdown.days}d {countdown.hours}h{" "}
                 {countdown.minutes}m {countdown.seconds}s
               </div>
             ) : (
-              <p className="text-red-500 font-semibold">
+              <p className="font-semibold text-red-500">
                 Expired
               </p>
             )}
           </div>
 
-          {/* INFO GRID */}
+          {/* INFO */}
           <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
-
-            <div>
+            <div className="p-3 rounded-xl bg-gray-100 border">
               <p className="text-gray-500">Price</p>
               <p className="font-semibold">৳{ticket.price}</p>
             </div>
 
-            <div>
-              <p className="text-gray-500">Available Tickets</p>
+            <div className="p-3 rounded-xl bg-gray-100 border">
+              <p className="text-gray-500">Available</p>
               <p className="font-semibold">{ticket.quantity}</p>
             </div>
 
-            <div className="col-span-2">
-              <p className="text-gray-500">Departure Date</p>
+            <div className="col-span-2 p-3 rounded-xl bg-gray-100 border">
+              <p className="text-gray-500">Departure</p>
               <p className="font-semibold">
                 {ticket.departureDateTime}
               </p>
@@ -127,22 +188,30 @@ export default function TicketDetailsPage() {
 
           {/* PERKS */}
           <div className="mt-6">
-            <p className="text-gray-500 mb-2">Included Perks</p>
-            <ul className="list-disc pl-5 text-sm">
-              {ticket.perks?.map((p) => (
-                <li key={p}>{p}</li>
+            <p className="mb-2 text-gray-600 font-medium">
+              Included Perks
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {ticket.perks?.map((perk) => (
+                <span
+                  key={perk}
+                  className="px-3 py-1 text-xs rounded-full bg-gray-200 border"
+                >
+                  {perk}
+                </span>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* BOOK BUTTON */}
+          {/* BUTTON */}
           <button
             disabled={disabled}
             onClick={() => setOpen(true)}
-            className={`mt-8 w-full py-3 rounded-xl font-semibold text-white ${
+            className={`mt-8 w-full rounded-xl py-3 font-semibold text-white transition ${
               disabled
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-gradient-to-r from-green-500 to-blue-600"
+                : "bg-gradient-to-r from-green-500 to-blue-600 hover:scale-[1.02]"
             }`}
           >
             {isExpired
@@ -156,10 +225,10 @@ export default function TicketDetailsPage() {
 
       {/* MODAL */}
       {open && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
-          <div className="bg-white text-black p-6 rounded-xl w-[320px]">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="w-[320px] rounded-2xl bg-white p-6 text-black shadow-2xl">
 
-            <h2 className="text-lg font-bold mb-3">
+            <h2 className="mb-3 text-lg font-bold">
               Book Ticket
             </h2>
 
@@ -169,20 +238,20 @@ export default function TicketDetailsPage() {
               max={ticket.quantity}
               value={qty}
               onChange={(e) => setQty(Number(e.target.value))}
-              className="w-full border p-2 rounded mb-4"
+              className="mb-4 w-full rounded-xl border p-2"
             />
 
             <div className="flex gap-2">
               <button
                 onClick={() => setOpen(false)}
-                className="w-1/2 bg-gray-300 py-2 rounded"
+                className="w-1/2 rounded-xl bg-gray-200 py-2"
               >
                 Cancel
               </button>
 
               <button
                 onClick={handleBooking}
-                className="w-1/2 bg-blue-600 text-white py-2 rounded"
+                className="w-1/2 rounded-xl bg-blue-600 py-2 text-white"
               >
                 Confirm
               </button>
@@ -191,7 +260,6 @@ export default function TicketDetailsPage() {
           </div>
         </div>
       )}
-
     </div>
   );
 }

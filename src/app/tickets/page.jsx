@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
 
 export default function AllTicketsPage() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const router = useRouter();
+  const { data: session, isPending } = useSession();
+
+  // fetch tickets
   useEffect(() => {
     const fetchTickets = async () => {
       try {
@@ -23,6 +28,19 @@ export default function AllTicketsPage() {
     fetchTickets();
   }, []);
 
+  // navigation
+  const handleClick = (id) => {
+    if (isPending) return;
+
+    if (!session) {
+      router.push("/auth/signin");
+      return;
+    }
+
+    router.push(`/tickets/${id}`);
+  };
+
+  // loading UI
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-white">
@@ -39,7 +57,7 @@ export default function AllTicketsPage() {
         <div className="mb-10">
           <h1 className="text-4xl font-bold">All Tickets</h1>
           <p className="mt-2 text-zinc-400">
-            Browse all admin-approved tickets
+            Browse admin-approved tickets
           </p>
         </div>
 
@@ -48,20 +66,20 @@ export default function AllTicketsPage() {
           {tickets.map((ticket) => (
             <div
               key={ticket._id}
-              className="group overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition hover:border-indigo-500"
+              className="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 hover:border-indigo-500 transition"
             >
 
               {/* Image */}
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative h-56">
                 <img
                   src={ticket.image}
                   alt={ticket.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="h-full w-full object-cover"
                 />
 
-                <div className="absolute left-4 top-4 rounded-full bg-indigo-600 px-3 py-1 text-xs">
+                <span className="absolute left-4 top-4 rounded-full bg-indigo-600 px-3 py-1 text-xs">
                   {ticket.transportType}
-                </div>
+                </span>
               </div>
 
               {/* Content */}
@@ -71,14 +89,12 @@ export default function AllTicketsPage() {
                   {ticket.title}
                 </h2>
 
-                {/* route */}
-                <div className="text-sm text-zinc-400 mb-4">
+                <p className="text-sm text-zinc-400 mb-4">
                   {ticket.from} → {ticket.to}
-                </div>
+                </p>
 
                 {/* details */}
                 <div className="space-y-2 text-sm">
-
                   <div className="flex justify-between">
                     <span className="text-zinc-400">Price</span>
                     <span className="text-green-400 font-medium">
@@ -88,14 +104,12 @@ export default function AllTicketsPage() {
 
                   <div className="flex justify-between">
                     <span className="text-zinc-400">Available</span>
-                    <span>{ticket.quantity} tickets</span>
+                    <span>{ticket.quantity}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-zinc-400">Departure</span>
-                    <span className="text-right">
-                      {ticket.departureDateTime}
-                    </span>
+                    <span>{ticket.departureDateTime}</span>
                   </div>
                 </div>
 
@@ -112,16 +126,18 @@ export default function AllTicketsPage() {
                 </div>
 
                 {/* button */}
-                <Link href={`/tickets/${ticket._id}`}>
-                  <button className="mt-6 w-full rounded-xl bg-indigo-600 py-3 font-medium hover:bg-indigo-500">
-                    See Details
-                  </button>
-                </Link>
+                <button
+                  onClick={() => handleClick(ticket._id)}
+                  className="mt-6 w-full rounded-xl bg-indigo-600 py-3 font-medium hover:bg-indigo-500"
+                >
+                  See Details
+                </button>
 
               </div>
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );
