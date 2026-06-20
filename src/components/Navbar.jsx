@@ -102,7 +102,7 @@ export default function Navbar() {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 transition hover:bg-zinc-800"
               >
-                <Image
+                <img
                   src={user?.image || "/avatar.png"}
                   alt={user?.name || "User"}
                   width={32}
@@ -164,7 +164,7 @@ export default function Navbar() {
             {/* User */}
             {isLoggedIn && (
               <div className="mb-4 flex items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
-                <Image
+                <img
                   src={user?.image || "/avatar.png"}
                   alt={user?.name || "User"}
                   width={44}
