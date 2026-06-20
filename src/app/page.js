@@ -1,6 +1,6 @@
 import AdvertisementSection from "@/components/AdvertisementSection";
 import Banner from "@/components/Banner";
-import Image from "next/image";
+import LatestTickets from "@/components/LatestTickets";
 
 export default function Home() {
   return (
@@ -8,6 +8,7 @@ export default function Home() {
      
       <Banner />
       <AdvertisementSection/>
+      <LatestTickets/>
 
     </div>
   );

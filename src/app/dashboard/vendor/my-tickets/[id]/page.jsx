@@ -57,9 +57,7 @@ export default function UpdateTicketPage() {
 
     const res = await fetch(`${baseUrl}/api/tickets/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
 
@@ -73,102 +71,122 @@ export default function UpdateTicketPage() {
     }
   };
 
-  if (loading)
+  if (loading) {
     return (
-      <div className="text-center text-zinc-400 mt-10">
-        Loading...
+      <div className="flex h-[60vh] items-center justify-center text-zinc-400">
+        Loading ticket...
       </div>
     );
+  }
 
   return (
-    <div className="mx-auto max-w-2xl p-6">
-      <h1 className="text-2xl font-bold mb-6">
-        Update Ticket
-      </h1>
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 py-10">
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="w-full max-w-3xl rounded-3xl border border-zinc-800 bg-zinc-900 shadow-xl">
 
-        <input
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          placeholder="Title"
-          className="input"
-        />
+        {/* Header */}
+        <div className="border-b border-zinc-800 p-6">
+          <h1 className="text-2xl font-bold text-white">
+            Update Ticket
+          </h1>
+          <p className="text-sm text-zinc-400 mt-1">
+            Edit ticket details and save changes
+          </p>
+        </div>
 
-        <input
-          name="from"
-          value={form.from}
-          onChange={handleChange}
-          placeholder="From"
-          className="input"
-        />
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
 
-        <input
-          name="to"
-          value={form.to}
-          onChange={handleChange}
-          placeholder="To"
-          className="input"
-        />
+          <div className="grid md:grid-cols-2 gap-4">
 
-        <input
-          name="transportType"
-          value={form.transportType}
-          onChange={handleChange}
-          placeholder="Transport Type"
-          className="input"
-        />
+            <input
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="Ticket Title"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-blue-500"
+            />
 
-        <input
-          name="price"
-          type="number"
-          value={form.price}
-          onChange={handleChange}
-          placeholder="Price"
-          className="input"
-        />
+            <input
+              name="transportType"
+              value={form.transportType}
+              onChange={handleChange}
+              placeholder="Transport Type"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-blue-500"
+            />
 
-        <input
-          name="quantity"
-          type="number"
-          value={form.quantity}
-          onChange={handleChange}
-          placeholder="Quantity"
-          className="input"
-        />
+            <input
+              name="from"
+              value={form.from}
+              onChange={handleChange}
+              placeholder="From Location"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-blue-500"
+            />
 
-        <input
-          name="departureDateTime"
-          value={form.departureDateTime}
-          onChange={handleChange}
-          placeholder="Departure Date Time"
-          className="input"
-        />
+            <input
+              name="to"
+              value={form.to}
+              onChange={handleChange}
+              placeholder="To Location"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-blue-500"
+            />
 
-        <input
-          name="perks"
-          value={form.perks}
-          onChange={handleChange}
-          placeholder="Perks (AC, Food...)"
-          className="input"
-        />
+            <input
+              name="price"
+              type="number"
+              value={form.price}
+              onChange={handleChange}
+              placeholder="Price"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-blue-500"
+            />
 
-        <input
-          name="image"
-          value={form.image}
-          onChange={handleChange}
-          placeholder="Image URL"
-          className="input"
-        />
+            <input
+              name="quantity"
+              type="number"
+              value={form.quantity}
+              onChange={handleChange}
+              placeholder="Quantity"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-blue-500"
+            />
 
-        <button
-          disabled={updating}
-          className="w-full bg-blue-600 text-white py-3 rounded"
-        >
-          {updating ? "Updating..." : "Update Ticket"}
-        </button>
-      </form>
+            <input
+              name="departureDateTime"
+              value={form.departureDateTime}
+              onChange={handleChange}
+              placeholder="Departure Date & Time"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-blue-500 md:col-span-2"
+            />
+
+            <input
+              name="perks"
+              value={form.perks}
+              onChange={handleChange}
+              placeholder="Perks (AC, Food, etc)"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-blue-500 md:col-span-2"
+            />
+
+            <input
+              name="image"
+              value={form.image}
+              onChange={handleChange}
+              placeholder="Image URL"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-blue-500 md:col-span-2"
+            />
+          </div>
+
+          {/* Button */}
+          <button
+            disabled={updating}
+            className={`w-full rounded-xl py-3 font-semibold transition ${
+              updating
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-500"
+            } text-white`}
+          >
+            {updating ? "Updating..." : "Update Ticket"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

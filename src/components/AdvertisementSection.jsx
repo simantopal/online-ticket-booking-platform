@@ -1,118 +1,100 @@
 "use client";
 
+import { getAdvertisements } from "@/lib/api/tickets";
 import Image from "next/image";
-
-const tickets = [
-  {
-    id: 1,
-    title: "Dhaka → Chittagong Express",
-    price: 1200,
-    quantity: 1,
-    transport: "Bus",
-    perks: ["AC", "WiFi", "Water Bottle"],
-    image: "/tickets/bus1.jpg",
-  },
-  {
-    id: 2,
-    title: "Dhaka → Sylhet Premium",
-    price: 1500,
-    quantity: 1,
-    transport: "Bus",
-    perks: ["Luxury Seat", "Snacks", "Charging Port"],
-    image: "/tickets/bus2.jpg",
-  },
-  {
-    id: 3,
-    title: "Dhaka → Cox’s Bazar",
-    price: 1800,
-    quantity: 1,
-    transport: "Bus",
-    perks: ["Sleeper Seat", "Blanket", "AC"],
-    image: "/tickets/bus3.jpg",
-  },
-  {
-    id: 4,
-    title: "Dhaka → Rajshahi Fast Trip",
-    price: 1000,
-    quantity: 1,
-    transport: "Train",
-    perks: ["Chair Coach", "Food Included"],
-    image: "/tickets/train1.jpg",
-  },
-  {
-    id: 5,
-    title: "Dhaka → Khulna Express",
-    price: 1100,
-    quantity: 1,
-    transport: "Train",
-    perks: ["AC Cabin", "Tea Service"],
-    image: "/tickets/train2.jpg",
-  },
-  {
-    id: 6,
-    title: "Dhaka City Premium Ride",
-    price: 300,
-    quantity: 1,
-    transport: "CNG / Ride",
-    perks: ["Fast Pickup", "AC", "Safe Ride"],
-    image: "/tickets/ride1.jpg",
-  },
-];
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function AdvertisementSection() {
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadTickets = async () => {
+      const data = await getAdvertisements();
+      setTickets(data);
+      setLoading(false);
+    };
+
+    loadTickets();
+  }, []);
+
   return (
-    <section className="py-10 px-4 bg-gray-950">
-      <h2 className="text-2xl font-bold text-white mb-6 text-center">
-        Featured Tickets
-      </h2>
+    <section className="bg-zinc-950 py-16">
+      <div className="container mx-auto px-4">
+        <div className="mb-10 text-center">
+          <h2 className="text-4xl font-bold text-white">
+            Featured Tickets
+          </h2>
+          <p className="mt-2 text-zinc-400">
+            Explore our handpicked top travel options
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 container mx-auto">
-        {tickets.map((ticket) => (
-          <div
-            key={ticket.id}
-            className="rounded-2xl border border-zinc-800 bg-zinc-900 overflow-hidden hover:scale-[1.02] transition"
-          >
-            <div className="relative h-40 w-full">
-              <Image
-                src={ticket.image}
-                alt={ticket.title}
-                fill
-                className="object-cover"
-              />
-            </div>
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {tickets.map((ticket) => (
+            <div
+              key={ticket._id}
+              className="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-500"
+            >
+              {/* Image */}
+              <div className="relative h-56">
+                <Image
+                  src={ticket.image}
+                  alt={ticket.title}
+                  fill
+                  className="object-cover"
+                />
 
-            <div className="p-4 text-white space-y-2">
-              <h3 className="text-lg font-semibold">{ticket.title}</h3>
-
-              <p className="text-sm text-zinc-400">
-                Transport: {ticket.transport}
-              </p>
-
-              <p className="text-sm text-zinc-300">
-                Quantity: {ticket.quantity}
-              </p>
-
-              <p className="text-indigo-400 font-bold">
-                ৳ {ticket.price} / unit
-              </p>
-
-              <div className="flex flex-wrap gap-2">
-                {ticket.perks.map((perk, i) => (
-                  <span
-                    key={i}
-                    className="text-xs bg-zinc-800 px-2 py-1 rounded-full text-zinc-300"
-                  >
-                    {perk}
-                  </span>
-                ))}
+                <div className="absolute right-4 top-4 rounded-full bg-indigo-600 px-4 py-1 text-xs font-medium text-white">
+                  {ticket.transportType}
+                </div>
               </div>
 
-              <button className="w-full mt-3 bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-xl transition">
-                See details
-              </button>
+              {/* Content */}
+              <div className="p-5 text-white">
+                <h3 className="mb-4 text-2xl font-bold">
+                  {ticket.title}
+                </h3>
+
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="font-semibold text-green-400">
+                    ৳ {ticket.price} / unit
+                  </p>
+
+                  <p className="text-zinc-300">
+                    Quantity: {ticket.quantity}
+                  </p>
+                </div>
+
+                <div className="mb-5 flex flex-wrap gap-2">
+                  {ticket.perks?.map((perk, index) => (
+                    <span
+                      key={index}
+                      className="rounded-full border border-zinc-700 px-3 py-1 text-sm text-zinc-300"
+                    >
+                      ✓ {perk}
+                    </span>
+                  ))}
+                </div>
+
+                <Link href={`/tickets/${ticket._id}`}>
+                  <button className="w-full rounded-xl bg-indigo-600 py-3 font-medium text-white transition hover:bg-indigo-500">
+                    See Details
+                  </button>
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        <div className="mt-10 text-center">
+          <Link href="/tickets">
+            <button className="rounded-full border border-zinc-700 px-8 py-3 text-white transition hover:border-indigo-500 hover:bg-indigo-600">
+              View All Tickets →
+            </button>
+          </Link>
+        </div>
       </div>
     </section>
   );
