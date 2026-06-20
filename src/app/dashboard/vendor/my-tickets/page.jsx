@@ -31,6 +31,27 @@ export default function MyTicketsPage() {
     loadTickets();
   }, [user?.email]);
 
+  const handleDelete = async (id) => {
+    const confirmDelete = confirm("Are you sure you want to delete this ticket?");
+    if (!confirmDelete) return;
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.deletedCount > 0) {
+      alert("Ticket deleted successfully");
+
+      // UI থেকে remove
+      setTickets((prev) => prev.filter((t) => t._id !== id));
+    }
+  };
+
   const getStatusClasses = (status) => {
     switch (status?.toLowerCase()) {
       case "approved":
@@ -116,7 +137,7 @@ export default function MyTicketsPage() {
                     >
                       {ticket.status
                         ? ticket.status.charAt(0).toUpperCase() +
-                          ticket.status.slice(1)
+                        ticket.status.slice(1)
                         : "Pending"}
                     </span>
                   </div>
@@ -162,23 +183,22 @@ export default function MyTicketsPage() {
                   <div className="mt-6 flex gap-3">
                     <Link
                       href={`/dashboard/vendor/my-tickets/${ticket._id}`}
-                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${
-                        isRejected
-                          ? "pointer-events-none cursor-not-allowed bg-zinc-800 text-zinc-500"
-                          : "bg-blue-600 text-white hover:bg-blue-500"
-                      }`}
+                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${isRejected
+                        ? "pointer-events-none cursor-not-allowed bg-zinc-800 text-zinc-500"
+                        : "bg-blue-600 text-white hover:bg-blue-500"
+                        }`}
                     >
                       <Pencil className="h-4 w-4" />
                       Update
                     </Link>
 
                     <button
-                      disabled={isRejected}
-                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${
-                        isRejected
+                      onClick={() => handleDelete(ticket._id)}
+                      disabled={ticket.status === "Rejected"}
+                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${ticket.status === "Rejected"
                           ? "cursor-not-allowed bg-zinc-800 text-zinc-500"
                           : "bg-red-800 text-white hover:bg-red-700"
-                      }`}
+                        }`}
                     >
                       <TrashBin className="h-4 w-4" />
                       Delete
