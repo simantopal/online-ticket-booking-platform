@@ -37,7 +37,7 @@ const ProfilePage = () => {
         <div className="relative px-8 pb-8">
           {/* Avatar */}
           <div className="-mt-16">
-            <Image
+            <img
               src={user?.image || "/avatar.png"}
               alt={user?.name || "Profile"}
               width={120}
