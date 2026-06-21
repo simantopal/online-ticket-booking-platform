@@ -19,3 +19,13 @@ export const getLatestTickets = async () => {
 
   return res.json();
 };
+
+export const getAllTickets = async () => {
+  const res = await fetch(`${baseUrl}/api/tickets`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch tickets");
+  }
+
+  return res.json();
+};
