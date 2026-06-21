@@ -36,12 +36,6 @@ export default function NotFound() {
             Go Back
           </button>
         </div>
-
-        <div className="mt-10">
-          <span className="inline-flex rounded-full border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-400">
-            Error 404
-          </span>
-        </div>
       </div>
     </div>
   );

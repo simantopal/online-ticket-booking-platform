@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
+import BookingModal from "@/components/BookingModal";
 
 export default function TicketDetailsPage() {
   const { id } = useParams();
@@ -93,29 +94,18 @@ export default function TicketDetailsPage() {
 
   const disabled = isExpired || isSoldOut;
 
-  const handleBooking = async () => {
-    if (qty < 1 || qty > ticket.quantity) {
-      alert("Invalid quantity");
-      return;
-    }
+  const handleBooking = async (data) => {
+    await fetch("http://localhost:5000/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...data,
+        userEmail: session.user.email,
+      }),
+    });
 
-    try {
-      await fetch("http://localhost:5000/api/bookings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ticketId: ticket._id,
-          quantity: qty,
-          status: "pending",
-          userEmail: session.user.email,
-        }),
-      });
-
-      setOpen(false);
-      alert("Booking successful!");
-    } catch (err) {
-      console.log(err);
-    }
+    setOpen(false);
+    alert("Booking successful!");
   };
 
   return (
@@ -170,11 +160,11 @@ export default function TicketDetailsPage() {
           <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
             <div className="p-3 rounded-xl bg-gray-100 border">
               <p className="text-gray-500">Price</p>
-              <p className="font-semibold">৳{ticket.price}</p>
+              <p className="font-semibold">৳{ticket.price}/per tickets</p>
             </div>
 
             <div className="p-3 rounded-xl bg-gray-100 border">
-              <p className="text-gray-500">Available</p>
+              <p className="text-gray-500">Available Tickets</p>
               <p className="font-semibold">{ticket.quantity}</p>
             </div>
 
@@ -208,57 +198,30 @@ export default function TicketDetailsPage() {
           <button
             disabled={disabled}
             onClick={() => setOpen(true)}
-            className={`mt-8 w-full rounded-xl py-3 font-semibold text-white transition ${
-              disabled
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-gradient-to-r from-green-500 to-blue-600 hover:scale-[1.02]"
-            }`}
+            className={`mt-8 w-full rounded-xl py-3 font-semibold text-white transition ${disabled
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-gradient-to-r from-green-500 to-blue-600 hover:scale-[1.02]"
+              }`}
           >
             {isExpired
               ? "Trip Expired"
               : isSoldOut
-              ? "Sold Out"
-              : "Book Now"}
+                ? "Sold Out"
+                : "Book Now"}
           </button>
         </div>
       </div>
 
       {/* MODAL */}
       {open && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="w-[320px] rounded-2xl bg-white p-6 text-black shadow-2xl">
-
-            <h2 className="mb-3 text-lg font-bold">
-              Book Ticket
-            </h2>
-
-            <input
-              type="number"
-              min={1}
-              max={ticket.quantity}
-              value={qty}
-              onChange={(e) => setQty(Number(e.target.value))}
-              className="mb-4 w-full rounded-xl border p-2"
-            />
-
-            <div className="flex gap-2">
-              <button
-                onClick={() => setOpen(false)}
-                className="w-1/2 rounded-xl bg-gray-200 py-2"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={handleBooking}
-                className="w-1/2 rounded-xl bg-blue-600 py-2 text-white"
-              >
-                Confirm
-              </button>
-            </div>
-
-          </div>
-        </div>
+        <BookingModal
+          open={open}
+          setOpen={setOpen}
+          ticket={ticket}
+          qty={qty}
+          setQty={setQty}
+          handleBooking={handleBooking}
+        />
       )}
     </div>
   );

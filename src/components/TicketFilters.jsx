@@ -30,7 +30,7 @@ export default function TicketFilters({ filters, setFilters }) {
         onChange={handleChange}
         className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3"
       >
-        <option value="">All Transport</option>
+        <option value="">All Transport Type</option>
         <option value="Bus">Bus</option>
         <option value="Train">Train</option>
         <option value="Flight">Flight</option>

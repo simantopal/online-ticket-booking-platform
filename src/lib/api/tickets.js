@@ -29,3 +29,9 @@ export const getAllTickets = async () => {
 
   return res.json();
 };
+
+export const getBookingsTickets = async () => {
+  const res = await fetch(`${baseUrl}/api/bookings`);
+
+  return res.json();
+};
