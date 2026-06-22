@@ -1,15 +1,40 @@
-import { Ticket, Envelope, PersonPencil, SquarePlus, TagDollar, LayoutSideContent } from "@gravity-ui/icons";
+import { getUserSession } from "@/lib/core/session";
+import { Ticket, Envelope, PersonPencil, SquarePlus, TagDollar, LayoutSideContent, ClockArrowRotateLeft, Persons, BroadcastSignal } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
 import Link from "next/link";
 
-export function DashboardSidebar() {
-    const navItems = [
+export async function DashboardSidebar() {
+
+    const user = await getUserSession()
+
+    const passengerNavLinks = [
+        { icon: PersonPencil, label: "Profile", href: "/dashboard/passenger/profile" },
+        { icon: SquarePlus, label: "My Booked Tickets", href: "/dashboard/passenger/booked-tickets" },
+        { icon: ClockArrowRotateLeft, label: "Transaction History", href: "/dashboard/vendor/Transaction" },
+    ]
+
+    const vendorNavLinks = [
         { icon: PersonPencil, label: "Profile", href: "/dashboard/vendor/profile" },
         { icon: SquarePlus, label: "Add Ticket", href: "/dashboard/vendor/add-tickets" },
         { icon: Ticket, label: "My Added Tickets", href: "/dashboard/vendor/my-tickets" },
         { icon: Envelope, label: "Requested Bookings", href: "/dashboard/vendor/bookings" },
         { icon: TagDollar, label: "Revenue Overview", href: "/dashboard/vendor/revenue" },
-    ];
+    ]
+
+    const adminNavLinks = [
+        { icon: PersonPencil, label: "Profile", href: "/dashboard/admin/profile" },
+        { icon: Ticket, label: "Manage Tickets", href: "/dashboard/admin/manage-tickets" },
+        { icon: Persons, label: "Manage Users", href: "/dashboard/admin/manage-users" },
+        { icon: BroadcastSignal, label: "Advertise Tickets", href: "/dashboard/admin/advertisement" },
+    ]
+
+    const NavLinksMap= {
+        passenger: passengerNavLinks,
+        vendor: vendorNavLinks,
+        admin: adminNavLinks
+    }
+
+    const navItems = NavLinksMap[user?.role || 'passenger']
 
     const navContent = <nav className="flex flex-col gap-1">
         {navItems.map((item) => (

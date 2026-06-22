@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
-import { Eye, EyeSlash } from "@gravity-ui/icons";
 import { signIn, signUp } from "@/lib/auth-client";
 import { toast } from "react-toastify";
 import { Label, Radio, RadioGroup } from "@heroui/react";
@@ -14,7 +13,7 @@ export default function SignupPage() {
 
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState("customer");
+  const [role, setRole] = useState("passenger");
 
   const [form, setForm] = useState({
     name: "",
@@ -31,37 +30,41 @@ export default function SignupPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  setLoading(true);
 
-    setLoading(true);
+  try {
+    const { error } = await signUp.email({
+      name: form.name,
+      email: form.email,
+      password: form.password,
+      image: form.image,
+      role,
+    });
 
-    try {
-      const { error } = await signUp.email({
-        name: form.name,
-        email: form.email,
-        password: form.password,
-        image: form.image,
-        role
-      });
+    if (error) {
+      toast.error(error.message || "Signup failed");
+      return;
+    }
 
-      if (error) {
-        toast.error(error.message || "Signup failed");
-        return;
+    toast.success("Account created successfully!");
+
+    setTimeout(() => {
+      if (role === "vendor") {
+        router.push("/dashboard/vendor");
+      } else {
+        router.push("/dashboard/passenger");
       }
 
-      toast.success("Account created successfully!");
-
-      setTimeout(() => {
-        router.push("/");
-        router.refresh();
-      }, 1000);
-    } catch (err) {
-      toast.error("Something went wrong");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      router.refresh();
+    }, 1000);
+  } catch (err) {
+    toast.error("Something went wrong");
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleGoogleLogin = async () => {
     try {
@@ -159,13 +162,13 @@ export default function SignupPage() {
 
           <div className="flex flex-col gap-4">
             <Label className="text-zinc-400">Role</Label>
-            <RadioGroup defaultValue="customer" name="role" onChange={value => setRole(value)} orientation="horizontal">
-              <Radio value="customer">
+            <RadioGroup defaultValue="passenger" name="role" onChange={value => setRole(value)} orientation="horizontal">
+              <Radio value="passenger">
                 <Radio.Content>
                   <Radio.Control>
                     <Radio.Indicator />
                   </Radio.Control>
-                  Customer
+                  Passenger
                 </Radio.Content>
               </Radio>
               <Radio value="vendor">

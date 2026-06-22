@@ -26,16 +26,12 @@ const RequestedBookingsPage = () => {
   const updateBookingStatus = async (id, status) => {
     await fetch(`http://localhost:5000/api/bookings/${id}`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
 
     setBookings((prev) =>
-      prev.map((b) =>
-        b._id === id ? { ...b, status } : b
-      )
+      prev.map((b) => (b._id === id ? { ...b, status } : b))
     );
   };
 
@@ -88,13 +84,12 @@ const RequestedBookingsPage = () => {
 
                 <td className="p-3">
                   <span
-                    className={`px-2 py-1 rounded text-xs ${
-                      b.status === "accepted"
+                    className={`px-2 py-1 rounded text-xs ${b.status === "accepted"
                         ? "bg-green-600"
                         : b.status === "rejected"
-                        ? "bg-red-600"
-                        : "bg-yellow-600"
-                    }`}
+                          ? "bg-red-600"
+                          : "bg-yellow-600"
+                      }`}
                   >
                     {b.status}
                   </span>

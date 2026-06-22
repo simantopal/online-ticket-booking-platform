@@ -3,16 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+
 import {
   Bars,
   Xmark,
   House,
   Ticket,
-  Rectangles4,
   Person,
   ArrowRightFromSquare,
   ChevronDown,
+  Rectangles4,
 } from "@gravity-ui/icons";
+
 import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
 
@@ -28,12 +30,35 @@ export default function Navbar() {
 
   const isLoggedIn = !!user;
 
-  if (isPending) return null;
+  if (isPending) {
+    return (
+      <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
+          <div className="text-white">Loading...</div>
+        </div>
+      </header>
+    );
+  }
+
+  const dashboardLinks = {
+    passenger: "/dashboard/passenger",
+    vendor: "/dashboard/vendor",
+    admin: "/dashboard/admin"
+  };
 
   const navLinks = [
-    { icon: House, label: "Home", href: "/" },
-    { icon: Ticket, label: "All Tickets", href: "/tickets" },
-    { icon: Rectangles4, label: "Dashboard", href: "/dashboard/vendor", private: true },
+    { id: "home", icon: House, label: "Home", href: "/" },
+    { id: "tickets", icon: Ticket, label: "All Tickets", href: "/tickets" },
+    ...(isLoggedIn
+      ? [
+        {
+          id: "dashboard",
+          icon: Rectangles4,
+          label: "Dashboard",
+          href: dashboardLinks[user?.role || "passenger"],
+        },
+      ]
+      : []),
   ];
 
   return (
@@ -47,15 +72,13 @@ export default function Navbar() {
             alt="TicketBari Logo"
             width={150}
             height={100}
-            className="object-contain w-50"
+            className="object-contain"
           />
         </Link>
 
-        {/* Nav Links */}
+        {/* Nav */}
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((item) => {
-            if (item.private && !isLoggedIn) return null;
-
             const Icon = item.icon;
 
             const isActive =
@@ -65,11 +88,10 @@ export default function Navbar() {
 
             return (
               <Link
-                key={item.href}
+                key={item.id}
                 href={item.href}
-                className={`flex items-center gap-2 font-medium transition hover:text-white ${
-                  isActive ? "text-blue-500" : "text-zinc-300"
-                }`}
+                className={`flex items-center gap-2 font-medium transition ${isActive ? "text-blue-500" : "text-zinc-300"
+                  }`}
               >
                 <Icon className="size-4" />
                 {item.label}
@@ -78,20 +100,20 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Desktop Auth */}
+        {/* Auth */}
         <div className="hidden md:flex">
           {!isLoggedIn ? (
             <div className="flex items-center gap-3">
               <Link
                 href="/auth/signin"
-                className="rounded-xl px-4 py-2 font-medium text-violet-400 transition hover:bg-zinc-800 hover:text-white"
+                className="rounded-xl px-4 py-2 text-violet-400 hover:bg-zinc-800 hover:text-white"
               >
                 Sign In
               </Link>
 
               <Link
                 href="/auth/signup"
-                className="rounded-xl bg-violet-600 px-5 py-2 font-semibold text-white transition hover:bg-violet-700"
+                className="rounded-xl bg-violet-600 px-5 py-2 font-semibold text-white hover:bg-violet-700"
               >
                 Register
               </Link>
@@ -100,28 +122,25 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 transition hover:bg-zinc-800"
+                className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 hover:bg-zinc-800"
               >
                 <img
                   src={user?.image || "/avatar.png"}
-                  alt={user?.name || "User"}
-                  width={32}
-                  height={32}
-                  className="rounded-full object-cover"
+                  className="h-8 w-8 rounded-full object-cover"
                 />
 
-                <span className="text-white font-medium">
-                  Welcome back! {user?.name}
+                <span className="text-white">
+                  {user?.name}
                 </span>
 
                 <ChevronDown className="size-4 text-zinc-400" />
               </button>
 
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 shadow-2xl">
+                <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-zinc-800 bg-zinc-900 shadow-xl">
                   <Link
                     href="/dashboard/vendor/profile"
-                    className="flex items-center gap-3 px-4 py-3 text-zinc-300 transition hover:bg-zinc-800 hover:text-white"
+                    className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:bg-zinc-800"
                   >
                     <Person className="size-4" />
                     My Profile
@@ -132,10 +151,10 @@ export default function Navbar() {
                       await signOut();
                       router.refresh();
                     }}
-                    className="flex w-full items-center gap-3 px-4 py-3 text-left text-red-400 transition hover:bg-red-500/10"
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left text-red-400 hover:bg-red-500/10"
                   >
                     <ArrowRightFromSquare className="size-4" />
-                    SignOut
+                    Sign Out
                   </button>
                 </div>
               )}
@@ -143,10 +162,10 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="text-white md:hidden"
+          className="md:hidden text-white"
         >
           {mobileOpen ? (
             <Xmark className="size-6" />
@@ -156,37 +175,12 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {mobileOpen && (
         <div className="border-t border-zinc-800 bg-zinc-950 md:hidden">
           <div className="space-y-2 p-4">
 
-            {/* User */}
-            {isLoggedIn && (
-              <div className="mb-4 flex items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
-                <img
-                  src={user?.image || "/avatar.png"}
-                  alt={user?.name || "User"}
-                  width={44}
-                  height={44}
-                  className="rounded-full object-cover"
-                />
-
-                <div>
-                  <h3 className="font-semibold text-white">
-                    {user?.name}
-                  </h3>
-                  <p className="text-sm text-zinc-400">
-                    {user?.email}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Links */}
             {navLinks.map((item) => {
-              if (item.private && !isLoggedIn) return null;
-
               const Icon = item.icon;
 
               const isActive =
@@ -196,12 +190,11 @@ export default function Navbar() {
 
               return (
                 <Link
-                  key={item.href}
+                  key={item.id}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 rounded-xl px-4 py-3 transition hover:bg-zinc-800 hover:text-white ${
-                    isActive ? "text-blue-500" : "text-zinc-300"
-                  }`}
+                  className={`flex items-center gap-3 rounded-xl px-4 py-3 ${isActive ? "text-blue-500" : "text-zinc-300"
+                    }`}
                 >
                   <Icon className="size-4" />
                   {item.label}
@@ -209,19 +202,18 @@ export default function Navbar() {
               );
             })}
 
-            {/* Auth */}
             {!isLoggedIn ? (
               <div className="space-y-2 pt-3">
                 <Link
                   href="/auth/signin"
-                  className="block rounded-xl border border-zinc-700 px-4 py-3 text-center text-zinc-300"
+                  className="block rounded-xl border border-zinc-700 px-4 py-3 text-center"
                 >
-                  SignIn
+                  Sign In
                 </Link>
 
                 <Link
                   href="/auth/signup"
-                  className="block rounded-xl bg-blue-600 px-4 py-3 text-center font-medium text-white"
+                  className="block rounded-xl bg-blue-600 px-4 py-3 text-center text-white"
                 >
                   Register
                 </Link>
@@ -233,10 +225,10 @@ export default function Navbar() {
                   router.refresh();
                   setMobileOpen(false);
                 }}
-                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-red-400 transition hover:bg-red-500/10"
+                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-red-400 hover:bg-red-500/10"
               >
                 <ArrowRightFromSquare className="size-4" />
-                SignOut
+                Sign Out
               </button>
             )}
           </div>

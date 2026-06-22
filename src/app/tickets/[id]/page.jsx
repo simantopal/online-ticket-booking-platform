@@ -95,6 +95,7 @@ export default function TicketDetailsPage() {
   const disabled = isExpired || isSoldOut;
 
   const handleBooking = async (data) => {
+    console.log("data", data);
     await fetch("http://localhost:5000/api/bookings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -106,6 +107,25 @@ export default function TicketDetailsPage() {
 
     setOpen(false);
     alert("Booking successful!");
+  };
+
+  const updateBookingStatus = async (id, status) => {
+    await fetch(`http://localhost:5000/api/bookings/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status }),
+    });
+  };
+
+  const handleOpenBooking = () => {
+    if (session?.user?.role !== "passenger") {
+      alert("Only passengers can book tickets");
+      return;
+    }
+
+    setOpen(true);
   };
 
   return (
@@ -197,10 +217,10 @@ export default function TicketDetailsPage() {
           {/* BUTTON */}
           <button
             disabled={disabled}
-            onClick={() => setOpen(true)}
+            onClick={handleOpenBooking}
             className={`mt-8 w-full rounded-xl py-3 font-semibold text-white transition ${disabled
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-gradient-to-r from-green-500 to-blue-600 hover:scale-[1.02]"
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-green-500 to-blue-600 hover:scale-[1.02]"
               }`}
           >
             {isExpired
