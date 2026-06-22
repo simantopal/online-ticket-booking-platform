@@ -25,7 +25,7 @@ export async function DashboardSidebar() {
         { icon: PersonPencil, label: "Profile", href: "/dashboard/admin/profile" },
         { icon: Ticket, label: "Manage Tickets", href: "/dashboard/admin/manage-tickets" },
         { icon: Persons, label: "Manage Users", href: "/dashboard/admin/manage-users" },
-        { icon: BroadcastSignal, label: "Advertise Tickets", href: "/dashboard/admin/advertisement" },
+        { icon: BroadcastSignal, label: "Advertise Tickets", href: "/dashboard/admin/advertisements" },
     ]
 
     const NavLinksMap= {

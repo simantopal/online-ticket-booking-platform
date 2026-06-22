@@ -38,6 +38,7 @@ export default function AllTicketsPage() {
 
   // Filter + Sort
   const filteredTickets = [...tickets]
+    .filter((ticket) => ticket.status === "approved")
     .filter(
       (ticket) =>
         ticket.from
@@ -53,8 +54,8 @@ export default function AllTicketsPage() {
       filters.sort === "asc"
         ? a.price - b.price
         : filters.sort === "desc"
-        ? b.price - a.price
-        : 0
+          ? b.price - a.price
+          : 0
     );
 
   // Navigation

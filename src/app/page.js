@@ -1,6 +1,8 @@
 import AdvertisementSection from "@/components/AdvertisementSection";
 import Banner from "@/components/Banner";
 import LatestTickets from "@/components/LatestTickets";
+import { PopularRoutes } from "@/components/PopularRoutes";
+import { WhyChooseUs } from "@/components/WhyChooseUs";
 
 export default function Home() {
   return (
@@ -9,6 +11,8 @@ export default function Home() {
       <Banner />
       <AdvertisementSection/>
       <LatestTickets/>
+      <PopularRoutes />
+      <WhyChooseUs />
 
     </div>
   );
