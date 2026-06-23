@@ -192,6 +192,7 @@ export default function AddTicketPage() {
                                 <option value="Bus">Bus</option>
                                 <option value="Train">Train</option>
                                 <option value="Flight">Flight</option>
+                                <option value="Flight">Launch</option>
                             </select>
                         </div>
                     </div>

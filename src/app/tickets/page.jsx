@@ -25,6 +25,7 @@ export default function AllTicketsPage() {
     const fetchTickets = async () => {
       try {
         const data = await getAllTickets();
+        console.log(data);
         setTickets(data);
       } catch (err) {
         console.log(err);
@@ -137,7 +138,7 @@ export default function AllTicketsPage() {
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-zinc-400">Available</span>
+                      <span className="text-zinc-400">Available Tickets</span>
                       <span>{ticket.quantity}</span>
                     </div>
 

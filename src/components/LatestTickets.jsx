@@ -79,11 +79,11 @@ export default function LatestTickets() {
                   </h3>
 
                   <p className="mb-2 text-green-400 font-semibold">
-                    ৳ {ticket.price} / unit
+                    ৳ {ticket.price} / Per tickets
                   </p>
 
                   <p className="mb-4 text-sm text-zinc-400">
-                    Available: {ticket.quantity}
+                    Available tickets: {ticket.quantity}
                   </p>
 
                   <div className="mb-5 flex flex-wrap gap-2">

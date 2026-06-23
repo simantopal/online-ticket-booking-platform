@@ -86,11 +86,11 @@ export default function AdvertisementSection() {
 
                   <div className="mb-4 flex items-center justify-between">
                     <p className="font-semibold text-green-400">
-                      ৳ {ticket.price} / unit
+                      ৳ {ticket.price} / Per tickets
                     </p>
 
                     <p className="text-zinc-300">
-                      Quantity: {ticket.quantity}
+                      Available tickets: {ticket.quantity}
                     </p>
                   </div>
 

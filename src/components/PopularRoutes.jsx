@@ -8,9 +8,9 @@ export function PopularRoutes() {
 
   return (
     <section className="py-16 px-4 md:px-10 bg-zinc-950">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-end justify-between mb-10">
-          <div>
+      <div className="max-w-7xl mx-auto">
+        {/* <div className="flex mb-10"> */}
+          <div className="items-center text-center justify-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
               Popular Routes
             </h2>
@@ -18,11 +18,7 @@ export function PopularRoutes() {
               Explore the most booked travel destinations
             </p>
           </div>
-
-          <span className="hidden md:inline text-sm text-blue-600 font-medium">
-            View all routes →
-          </span>
-        </div>
+        {/* </div> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {routes.map((route, idx) => (

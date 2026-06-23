@@ -16,7 +16,6 @@ export default function TicketDetailsPage() {
   const [open, setOpen] = useState(false);
   const [loadingTicket, setLoadingTicket] = useState(true);
 
-  // LIVE COUNTDOWN STATE
   const [countdown, setCountdown] = useState(null);
 
   // AUTH CHECK
@@ -50,7 +49,7 @@ export default function TicketDetailsPage() {
     fetchTicket();
   }, [id]);
 
-  // LIVE COUNTDOWN EFFECT
+  // COUNTDOWN
   useEffect(() => {
     if (!ticket?.departureDateTime) return;
 
@@ -94,29 +93,43 @@ export default function TicketDetailsPage() {
 
   const disabled = isExpired || isSoldOut;
 
+  // ✅ FIXED BOOKING FUNCTION
   const handleBooking = async (data) => {
-    console.log("data", data);
-    await fetch("http://localhost:5000/api/bookings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...data,
-        userEmail: session.user.email,
-      }),
-    });
+    try {
+      const res = await fetch("http://localhost:5000/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ticketId: ticket._id,
+          ticketTitle: ticket.title,
+          quantity: qty,
+          unitPrice: ticket.price,
+          totalPrice: ticket.price * qty,
+          userEmail: session.user.email,
+        }),
+      });
 
-    setOpen(false);
-    alert("Booking successful!");
-  };
+      const result = await res.json();
 
-  const updateBookingStatus = async (id, status) => {
-    await fetch(`http://localhost:5000/api/bookings/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ status }),
-    });
+      if (!res.ok) {
+        alert(result.message || "Booking failed");
+        return;
+      }
+
+      // 🔥 UPDATE UI INSTANTLY
+      setTicket((prev) => ({
+        ...prev,
+        quantity: result.remainingTickets,
+      }));
+
+      setOpen(false);
+      setQty(1);
+
+      alert("Booking successful!");
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong!");
+    }
   };
 
   const handleOpenBooking = () => {
@@ -132,10 +145,10 @@ export default function TicketDetailsPage() {
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-900 flex items-center justify-center p-6">
 
       {/* CARD */}
-      <div className="w-full max-w-6xl overflow-hidden rounded-3xl shadow-2xl border border-white/10 backdrop-blur-xl bg-white/90 grid md:grid-cols-2">
+      <div className="w-full max-w-6xl overflow-hidden rounded-3xl shadow-2xl border border-white/10 backdrop-blur-xl bg-white/80 grid md:grid-cols-2">
 
         {/* IMAGE */}
-        <div className="relative min-h-[500px]">
+        <div className="relative min-h-125">
           <img
             src={ticket.image}
             alt={ticket.title}
@@ -150,7 +163,7 @@ export default function TicketDetailsPage() {
         {/* CONTENT */}
         <div className="p-8 text-black">
 
-          <h1 className="text-3xl font-bold tracking-tight">
+          <h1 className="text-3xl font-bold">
             {ticket.title}
           </h1>
 
@@ -160,17 +173,17 @@ export default function TicketDetailsPage() {
 
           {/* COUNTDOWN */}
           <div className="mt-6 p-4 rounded-xl bg-gray-100 border">
-            <p className="mb-2 text-sm text-gray-500">
+            <p className="text-sm text-gray-500 mb-2">
               Departure Countdown
             </p>
 
             {countdown ? (
-              <div className="text-lg font-bold text-green-600">
+              <div className="text-green-600 font-bold">
                 {countdown.days}d {countdown.hours}h{" "}
                 {countdown.minutes}m {countdown.seconds}s
               </div>
             ) : (
-              <p className="font-semibold text-red-500">
+              <p className="text-red-500 font-semibold">
                 Expired
               </p>
             )}
@@ -178,17 +191,17 @@ export default function TicketDetailsPage() {
 
           {/* INFO */}
           <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
-            <div className="p-3 rounded-xl bg-gray-100 border">
+            <div className="p-3 bg-gray-100 border rounded-xl">
               <p className="text-gray-500">Price</p>
-              <p className="font-semibold">৳{ticket.price}/per tickets</p>
+              <p className="font-semibold">৳{ticket.price}</p>
             </div>
 
-            <div className="p-3 rounded-xl bg-gray-100 border">
+            <div className="p-3 bg-gray-100 border rounded-xl">
               <p className="text-gray-500">Available Tickets</p>
               <p className="font-semibold">{ticket.quantity}</p>
             </div>
 
-            <div className="col-span-2 p-3 rounded-xl bg-gray-100 border">
+            <div className="col-span-2 p-3 bg-gray-100 border rounded-xl">
               <p className="text-gray-500">Departure</p>
               <p className="font-semibold">
                 {ticket.departureDateTime}
@@ -198,7 +211,7 @@ export default function TicketDetailsPage() {
 
           {/* PERKS */}
           <div className="mt-6">
-            <p className="mb-2 text-gray-600 font-medium">
+            <p className="text-gray-600 font-medium mb-2">
               Included Perks
             </p>
 
@@ -206,7 +219,7 @@ export default function TicketDetailsPage() {
               {ticket.perks?.map((perk) => (
                 <span
                   key={perk}
-                  className="px-3 py-1 text-xs rounded-full bg-gray-200 border"
+                  className="px-3 py-1 text-xs bg-gray-200 border rounded-full"
                 >
                   {perk}
                 </span>
@@ -218,16 +231,17 @@ export default function TicketDetailsPage() {
           <button
             disabled={disabled}
             onClick={handleOpenBooking}
-            className={`mt-8 w-full rounded-xl py-3 font-semibold text-white transition ${disabled
+            className={`mt-8 w-full py-3 rounded-xl font-semibold text-white transition ${
+              disabled
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-gradient-to-r from-green-500 to-blue-600 hover:scale-[1.02]"
-              }`}
+            }`}
           >
-            {isExpired
-              ? "Trip Expired"
-              : isSoldOut
-                ? "Sold Out"
-                : "Book Now"}
+            {disabled
+              ? isExpired
+                ? "Trip Expired"
+                : "Sold Out"
+              : "Book Now"}
           </button>
         </div>
       </div>
