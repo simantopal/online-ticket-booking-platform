@@ -34,6 +34,7 @@ export default function TicketFilters({ filters, setFilters }) {
         <option value="Bus">Bus</option>
         <option value="Train">Train</option>
         <option value="Flight">Flight</option>
+        <option value="Launch">Launch</option>
       </select>
 
       <select

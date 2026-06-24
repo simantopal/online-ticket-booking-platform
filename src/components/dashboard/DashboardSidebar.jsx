@@ -10,7 +10,7 @@ export async function DashboardSidebar() {
     const passengerNavLinks = [
         { icon: PersonPencil, label: "Profile", href: "/dashboard/passenger/profile" },
         { icon: SquarePlus, label: "My Booked Tickets", href: "/dashboard/passenger/booked-tickets" },
-        { icon: ClockArrowRotateLeft, label: "Transaction History", href: "/dashboard/vendor/Transaction" },
+        { icon: ClockArrowRotateLeft, label: "Transaction History", href: "/dashboard/passenger/transaction" },
     ]
 
     const vendorNavLinks = [

@@ -1,28 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { addTicket } from "@/lib/actions/tickets";
 import { toast } from "react-toastify";
 import { redirect } from "next/navigation";
 
-const availablePerks = [
-    "AC",
-    "Breakfast",
-    "WiFi",
-    "Charging Port",
-    "Window Seat",
-    "Extra Luggage",
-];
+const availablePerks = [ "AC", "Breakfast", "WiFi",  "Charging Port", "Window Seat", "Extra Luggage",];
 
 export default function AddTicketPage() {
     const { data: session, isPending } = useSession();
+    const user = session?.user;
 
     const [selectedPerks, setSelectedPerks] = useState([]);
     const [imagePreview, setImagePreview] = useState(null);
     const [imageUrl, setImageUrl] = useState("");
     const [uploading, setUploading] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        if (user?.email) {
+            fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users`)
+                .then((res) => res.json())
+                .then((data) => {
+                    const foundUser = data.find(
+                        (u) => u.email === user.email
+                    );
+
+                    setCurrentUser(foundUser);
+                });
+        }
+    }, [user]);
 
     if (isPending) {
         return (
@@ -31,8 +40,6 @@ export default function AddTicketPage() {
             </div>
         );
     }
-
-    const user = session?.user;
 
     const handlePerkChange = (perk) => {
         if (selectedPerks.includes(perk)) {
@@ -48,7 +55,6 @@ export default function AddTicketPage() {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Local Preview
         setImagePreview(URL.createObjectURL(file));
 
         try {
@@ -88,12 +94,9 @@ export default function AddTicketPage() {
             quantity: Number(form.quantity.value),
             departureDateTime: form.departureDateTime.value,
             perks: selectedPerks,
-
-            image: imageUrl, // imgbb থেকে পাওয়া URL
-
+            image: imageUrl,
             vendorName: user?.name,
             vendorEmail: user?.email,
-
             status: "Pending",
             createdAt: new Date(),
         };
@@ -102,14 +105,29 @@ export default function AddTicketPage() {
         if (res.insertedId) {
             toast.success("Ticket Add successfully");
             e.target.reset();
-            redirect("/dashboard/vendor");
+            window.location.reload();
         }
-
-        // TODO:
-        // 1. Upload image to imgbb
-        // 2. Get image URL
-        // 3. Save ticket to database
     };
+
+    if (currentUser?.isFraud) {
+        return (
+            <div className="flex min-h-[60vh] items-center justify-center">
+                <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-8 text-center">
+                    <h2 className="text-2xl font-bold text-red-500">
+                        Fraud Vendor
+                    </h2>
+
+                    <p className="mt-3 text-zinc-300">
+                        Your account has been marked as fraud.
+                    </p>
+
+                    <p className="mt-2 text-zinc-400">
+                        Fraud vendors are not allowed to add tickets.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="mx-auto max-w-5xl my-10">

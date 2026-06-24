@@ -63,8 +63,8 @@ export default function LatestTickets() {
                   <Image
                     src={ticket.image}
                     alt={ticket.title}
-                    fill
-                    className="object-cover"
+                    fill="true"
+                    className="h-full w-full object-cover"
                   />
 
                   <div className="absolute top-4 right-4 rounded-full bg-indigo-600 px-3 py-1 text-xs text-white">

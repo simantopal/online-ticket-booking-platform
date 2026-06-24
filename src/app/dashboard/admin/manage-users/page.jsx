@@ -26,9 +26,7 @@ export default function ManageUsersPage() {
     fetchUsers();
   }, []);
 
-  // =========================
   // ROLE UPDATE
-  // =========================
   const updateRole = async (id, role) => {
     try {
       const res = await fetch(
@@ -41,7 +39,6 @@ export default function ManageUsersPage() {
       );
 
       const data = await res.json();
-      console.log("ROLE UPDATE:", data);
 
       if (data.modifiedCount > 0) {
         setUsers((prev) =>
@@ -55,39 +52,37 @@ export default function ManageUsersPage() {
     }
   };
 
-  // =========================
-  // MARK FRAUD (FIXED)
-  // =========================
-  const markFraud = async (id) => {
+  // MARK / UNDO FRAUD
+  const toggleFraud = async (user) => {
+    const makeFraud = !user.isFraud;
+
     const confirmAction = window.confirm(
-      "Are you sure you want to mark this vendor as fraud?"
+      makeFraud
+        ? "Are you sure you want to mark this vendor as fraud?"
+        : "Are you sure you want to remove fraud status?"
     );
 
     if (!confirmAction) return;
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${user._id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-
-          // 🔥 IMPORTANT FIX
           body: JSON.stringify({
-            isFraud: true,
-            role: "vendor",
+            isFraud: makeFraud,
           }),
         }
       );
 
       const data = await res.json();
-      console.log("FRAUD RESPONSE:", data);
 
       if (data.modifiedCount > 0) {
         setUsers((prev) =>
           prev.map((u) =>
-            u._id === id
-              ? { ...u, isFraud: true }
+            u._id === user._id
+              ? { ...u, isFraud: makeFraud }
               : u
           )
         );
@@ -112,7 +107,7 @@ export default function ManageUsersPage() {
         Manage Users
       </h1>
 
-      {/* ================= TABLE ================= */}
+      {/* DESKTOP TABLE */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full border border-zinc-800">
           <thead>
@@ -184,15 +179,18 @@ export default function ManageUsersPage() {
 
                       {isVendor && (
                         <button
-                          onClick={() => markFraud(user._id)}
-                          disabled={isFraud}
+                          onClick={() =>
+                            toggleFraud(user)
+                          }
                           className={`px-3 py-1 rounded ${
                             isFraud
-                              ? "bg-red-900/40 text-red-400 cursor-not-allowed"
+                              ? "bg-green-600 hover:bg-green-500"
                               : "bg-red-600 hover:bg-red-500"
                           }`}
                         >
-                          Mark Fraud
+                          {isFraud
+                            ? "Undo Fraud"
+                            : "Mark Fraud"}
                         </button>
                       )}
                     </div>
@@ -204,7 +202,7 @@ export default function ManageUsersPage() {
         </table>
       </div>
 
-      {/* ================= MOBILE ================= */}
+      {/* MOBILE CARDS */}
       <div className="grid gap-4 md:hidden">
         {users.map((user) => {
           const isVendor = user.role === "vendor";
@@ -266,15 +264,18 @@ export default function ManageUsersPage() {
 
                 {isVendor && (
                   <button
-                    onClick={() => markFraud(user._id)}
-                    disabled={isFraud}
+                    onClick={() =>
+                      toggleFraud(user)
+                    }
                     className={`w-full px-3 py-2 rounded ${
                       isFraud
-                        ? "bg-red-900/40 text-red-400"
+                        ? "bg-green-600"
                         : "bg-red-600"
                     }`}
                   >
-                    Mark Fraud
+                    {isFraud
+                      ? "Undo Fraud"
+                      : "Mark Fraud"}
                   </button>
                 )}
               </div>

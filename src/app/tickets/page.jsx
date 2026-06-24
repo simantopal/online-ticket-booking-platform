@@ -103,15 +103,21 @@ export default function AllTicketsPage() {
             filteredTickets.map((ticket) => (
               <div
                 key={ticket._id}
-                className="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition hover:border-indigo-500"
+                className="flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition hover:border-indigo-500"
               >
                 {/* Image */}
                 <div className="relative h-56">
-                  <img
-                    src={ticket.image}
-                    alt={ticket.title}
-                    className="h-full w-full object-cover"
-                  />
+                  {ticket.image ? (
+                    <img
+                      src={ticket.image}
+                      alt={ticket.title}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-zinc-800">
+                      No Image
+                    </div>
+                  )}
 
                   <span className="absolute left-4 top-4 rounded-full bg-indigo-600 px-3 py-1 text-xs">
                     {ticket.transportType}
@@ -119,7 +125,7 @@ export default function AllTicketsPage() {
                 </div>
 
                 {/* Content */}
-                <div className="p-5">
+                <div className="flex flex-1 flex-col p-5">
                   <h2 className="mb-2 text-xl font-semibold">
                     {ticket.title}
                   </h2>
@@ -138,13 +144,19 @@ export default function AllTicketsPage() {
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-zinc-400">Available Tickets</span>
+                      <span className="text-zinc-400">
+                        Available Tickets
+                      </span>
                       <span>{ticket.quantity}</span>
                     </div>
 
-                    <div className="flex justify-between">
-                      <span className="text-zinc-400">Departure</span>
-                      <span>{ticket.departureDateTime}</span>
+                    <div className="flex justify-between gap-3">
+                      <span className="text-zinc-400">
+                        Departure
+                      </span>
+                      <span className="text-right text-xs">
+                        {ticket.departureDateTime}
+                      </span>
                     </div>
                   </div>
 
@@ -160,13 +172,15 @@ export default function AllTicketsPage() {
                     ))}
                   </div>
 
-                  {/* Button */}
-                  <button
-                    onClick={() => handleClick(ticket._id)}
-                    className="mt-6 w-full rounded-xl bg-indigo-600 py-3 font-medium transition hover:bg-indigo-500"
-                  >
-                    See Details
-                  </button>
+                  {/* Button Always Bottom */}
+                  <div className="mt-auto pt-6">
+                    <button
+                      onClick={() => handleClick(ticket._id)}
+                      className="w-full rounded-xl bg-indigo-600 py-3 font-medium transition hover:bg-indigo-500"
+                    >
+                      See Details
+                    </button>
+                  </div>
                 </div>
               </div>
             ))
