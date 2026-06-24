@@ -133,7 +133,7 @@ export default function TicketGrid() {
   };
 
   return (
-    <div className="p-6 bg-zinc-950 min-h-screen text-white">
+    <div className="p-6 bg-background min-h-screen text-foreground">
       <h1 className="text-3xl font-bold mb-6">My Booked Tickets</h1>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -162,7 +162,7 @@ export default function TicketGrid() {
             return (
               <div
                 key={t._id}
-                className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg"
+                className="bg-background border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl"
               >
                 {/* IMAGE */}
                 <div className="relative h-48 w-full">
@@ -173,7 +173,7 @@ export default function TicketGrid() {
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="h-full w-full bg-zinc-800 flex items-center justify-center text-zinc-500">
+                    <div className="h-full w-full bg-zinc-800 flex items-center justify-center text-foreground">
                       No Image
                     </div>
                   )}
@@ -190,20 +190,20 @@ export default function TicketGrid() {
 
                   {/* STATUS */}
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-zinc-400">
+                    <span className="text-sm text-foreground">
                       Booked Qty:{" "}
-                      <span className="text-white">{bookedQty}</span>
+                      <span className="text-foreground">{bookedQty}</span>
                     </span>
                   </div>
 
                   {/* ROUTE */}
-                  <p className="text-sm text-zinc-300">
+                  <p className="text-sm text-foreground">
                     {t.from} <span className="text-zinc-500">→</span> {t.to}
                   </p>
 
                   {/* PRICE */}
                   <div className="flex justify-between text-sm">
-                    <span className="text-zinc-400">Price: ৳{t.price}</span>
+                    <span className="text-foreground">Price: ৳{t.price}</span>
                     <span className="text-emerald-400 font-semibold">
                       Total: ৳{totalValue}
                     </span>

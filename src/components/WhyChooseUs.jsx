@@ -25,7 +25,7 @@ export function WhyChooseUs() {
   ];
 
   return (
-    <section className="py-12 px-4 md:px-10 bg-zinc-950">
+    <section className="py-12 px-4 md:px-10 bg-background">
       <h2 className="text-2xl font-bold mb-6 text-center">
         Why Choose Us
       </h2>
@@ -34,7 +34,7 @@ export function WhyChooseUs() {
         {features.map((item, idx) => (
           <div
             key={idx}
-            className="p-6 border rounded-xl bg-zinc-900 hover:shadow-md transition text-center"
+            className="p-6 border rounded-xl hover:shadow-md transition text-center"
           >
             <div className="flex justify-center mb-3 text-blue-600">
               {item.icon}

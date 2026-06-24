@@ -94,19 +94,19 @@ export default function AllTicketsPage() {
   // Loading UI
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-950 text-white">
+      <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
         <Spinner /> Loading tickets...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-7xl px-6 py-12">
         {/* Header */}
         <div className="mb-10 text-center">
           <h1 className="text-3xl font-bold">All Tickets</h1>
-          <p className="mt-2 text-zinc-400">
+          <p className="mt-2 text-default-500">
             Browse admin-approved tickets
           </p>
         </div>
@@ -123,7 +123,7 @@ export default function AllTicketsPage() {
             paginatedTickets.map((ticket) => (
               <div
                 key={ticket._id}
-                className="flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition hover:border-indigo-500"
+                className="flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-background shadow-2xl transition hover:border-indigo-500"
               >
                 {/* Image */}
                 <div className="relative h-56">

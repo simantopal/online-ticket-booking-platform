@@ -39,11 +39,11 @@ export default function LatestTickets() {
   }
 
   return (
-    <section className="bg-zinc-950 py-16">
+    <section className="bg-background py-16">
       <div className="container mx-auto px-4">
 
         <div className="mb-10 text-center">
-          <h2 className="text-4xl font-bold text-white">
+          <h2 className="text-4xl font-bold text-foreground">
             Latest Tickets
           </h2>
           <p className="mt-2 text-zinc-400">

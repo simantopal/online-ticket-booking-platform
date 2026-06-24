@@ -1,5 +1,6 @@
 "use client";
 
+import { Table } from "@heroui/react";
 import { useEffect, useState } from "react";
 
 export default function ManageTicketsPage() {
@@ -68,138 +69,76 @@ export default function ManageTicketsPage() {
   }
 
   return (
-    <div className="p-4 md:p-6 text-white">
-      <h1 className="text-xl md:text-2xl font-bold mb-6">
+    <div className="container mx-auto">
+      <h1 className="text-xl md:text-2xl font-bold my-6">
         Manage Tickets
       </h1>
-
-      {/* Desktop / Tablet Table */}
-      <div className="hidden md:block overflow-x-auto rounded-xl border border-zinc-800">
-        <table className="w-full min-w-[800px]">
-          <thead>
-            <tr className="bg-zinc-900 text-left">
-              <th className="p-4">Title</th>
-              <th className="p-4">Vendor</th>
-              <th className="p-4">Route</th>
-              <th className="p-4">Status</th>
-              <th className="p-4">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {tickets.map((t) => (
-              <tr
-                key={t._id}
-                className="border-t border-zinc-800"
-              >
-                <td className="p-4">{t.title}</td>
-
-                <td className="p-4 break-all">
-                  {t.vendorEmail}
-                </td>
-
-                <td className="p-4">
-                  {t.from} → {t.to}
-                </td>
-
-                <td className="p-4">
-                  <span
-                    className={`px-2 py-1 rounded text-xs ${getStatusStyle(
-                      t.status
-                    )}`}
-                  >
-                    {t.status || "pending"}
-                  </span>
-                </td>
-
-                <td className="p-4">
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() =>
-                        updateStatus(t._id, "approved")
-                      }
-                      className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded"
-                    >
-                      Approve
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        updateStatus(t._id, "rejected")
-                      }
-                      className="px-3 py-1 bg-red-600 hover:bg-red-700 rounded"
-                    >
-                      Reject
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Mobile Cards */}
-      <div className="grid gap-4 md:hidden">
-        {tickets.map((t) => (
-          <div
-            key={t._id}
-            className="border border-zinc-800 rounded-xl p-4 bg-zinc-900/50"
+      <Table>
+        <Table.ScrollContainer>
+          <Table.Content
+            aria-label="Manage tickets table"
+            className="border border-default-200 rounded-xl"
           >
-            <h3 className="font-semibold text-lg mb-3">
-              {t.title}
-            </h3>
+            <Table.Header>
+              <Table.Column isRowHeader >Title</Table.Column>
+              <Table.Column>Vendor</Table.Column>
+              <Table.Column>Route</Table.Column>
+              <Table.Column>Status</Table.Column>
+              <Table.Column>Action</Table.Column>
+            </Table.Header>
 
-            <div className="space-y-2 text-sm">
-              <p>
-                <span className="text-zinc-400">
-                  Vendor:
-                </span>{" "}
-                <span className="break-all">
-                  {t.vendorEmail}
-                </span>
-              </p>
+            <Table.Body>
+              {tickets.map((t) => (
+                <Table.Row key={t._id}>
+                  <Table.Cell>{t.title}</Table.Cell>
 
-              <p>
-                <span className="text-zinc-400">
-                  Route:
-                </span>{" "}
-                {t.from} → {t.to}
-              </p>
+                  <Table.Cell>
+                    <span className="break-all">
+                      {t.vendorEmail}
+                    </span>
+                  </Table.Cell>
 
-              <div>
-                <span
-                  className={`px-2 py-1 rounded text-xs ${getStatusStyle(
-                    t.status
-                  )}`}
-                >
-                  {t.status || "pending"}
-                </span>
-              </div>
-            </div>
+                  <Table.Cell>
+                    {t.from} → {t.to}
+                  </Table.Cell>
 
-            <div className="flex gap-2 mt-4">
-              <button
-                onClick={() =>
-                  updateStatus(t._id, "approved")
-                }
-                className="flex-1 px-3 py-2 bg-green-600 hover:bg-green-700 rounded"
-              >
-                Approve
-              </button>
+                  <Table.Cell>
+                    <span
+                      className={`px-2 py-1 rounded text-xs ${getStatusStyle(
+                        t.status
+                      )}`}
+                    >
+                      {t.status || "pending"}
+                    </span>
+                  </Table.Cell>
 
-              <button
-                onClick={() =>
-                  updateStatus(t._id, "rejected")
-                }
-                className="flex-1 px-3 py-2 bg-red-600 hover:bg-red-700 rounded"
-              >
-                Reject
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+                  <Table.Cell>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() =>
+                          updateStatus(t._id, "approved")
+                        }
+                        className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded text-white"
+                      >
+                        Approve
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          updateStatus(t._id, "rejected")
+                        }
+                        className="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-white"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+      </Table>
     </div>
   );
 }

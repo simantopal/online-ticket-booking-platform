@@ -120,7 +120,7 @@ export default function AddTicketPage() {
     return (
         <div className="mx-auto max-w-5xl my-10">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white">Add Ticket</h1>
+                <h1 className="text-3xl font-bold text-foreground">Add Ticket</h1>
                 <p className="mt-2 text-zinc-400">Create a new ticket listing for customers.</p>
             </div>
 

@@ -70,7 +70,7 @@ const ProfilePage = () => {
 
   {/* HEADER */}
   <div className="mb-5 md:mb-6">
-    <h1 className="text-2xl md:text-3xl font-bold text-white">
+    <h1 className="text-2xl md:text-3xl font-bold text-base-100">
       My Profile
     </h1>
     <p className="mt-1 text-sm md:text-base text-zinc-400">
@@ -79,7 +79,7 @@ const ProfilePage = () => {
   </div>
 
   {/* CARD */}
-  <div className="container mx-auto overflow-hidden rounded-2xl md:rounded-3xl border border-zinc-800 bg-zinc-900">
+  <div className="container mx-auto overflow-hidden rounded-2xl md:rounded-3xl border border-zinc-800 bg-background text-foreground">
 
     <div className="h-28 md:h-40 bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600" />
 
@@ -95,7 +95,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Name */}
-      <h2 className="text-2xl md:text-3xl font-bold text-white mt-3 md:mt-4">
+      <h2 className="text-2xl md:text-3xl font-bold text-foreground mt-3 md:mt-4">
         {user?.name}
       </h2>
 
@@ -107,24 +107,24 @@ const ProfilePage = () => {
       {/* DETAILS */}
       <div className="mt-6 md:mt-8 grid gap-3 md:gap-4 md:grid-cols-2">
 
-        <div className="p-4 md:p-5 rounded-2xl border border-zinc-800 bg-zinc-950">
+        <div className="p-4 md:p-5 rounded-2xl border border-zinc-800 bg-background">
           <p className="text-xs md:text-sm text-zinc-400">Name</p>
-          <p className="text-white font-medium">{user?.name}</p>
+          <p className="text-foreground font-medium">{user?.name}</p>
         </div>
 
-        <div className="p-4 md:p-5 rounded-2xl border border-zinc-800 bg-zinc-950">
+        <div className="p-4 md:p-5 rounded-2xl border border-zinc-800 bg-background">
           <p className="text-xs md:text-sm text-zinc-400">Email</p>
-          <p className="text-white font-medium break-all">{user?.email}</p>
+          <p className="text-foreground font-medium break-all">{user?.email}</p>
         </div>
 
-        <div className="p-4 md:p-5 rounded-2xl border border-zinc-800 bg-zinc-950">
+        <div className="p-4 md:p-5 rounded-2xl border border-zinc-800 bg-background">
           <p className="text-xs md:text-sm text-zinc-400">Role</p>
-          <p className="text-white font-medium">{user?.role}</p>
+          <p className="text-foreground font-medium">{user?.role}</p>
         </div>
 
-        <div className="p-4 md:p-5 rounded-2xl border border-zinc-800 bg-zinc-950">
+        <div className="p-4 md:p-5 rounded-2xl border border-zinc-800 bg-background">
           <p className="text-xs md:text-sm text-zinc-400">User ID</p>
-          <p className="text-white truncate">{user?.id}</p>
+          <p className="text-foreground truncate">{user?.id}</p>
         </div>
 
       </div>

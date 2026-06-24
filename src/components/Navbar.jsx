@@ -3,11 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Bars, Xmark, House, Ticket, Person, ArrowRightFromSquare, ChevronDown, Rectangles4,} from "@gravity-ui/icons";
+import { Bars, Xmark, House, Ticket, Person, ArrowRightFromSquare, ChevronDown, Rectangles4, } from "@gravity-ui/icons";
 import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
 import { Spinner } from "@heroui/react";
-
+import ThemeToggle from "./ThemeToggle";
 
 
 export default function Navbar() {
@@ -24,7 +24,7 @@ export default function Navbar() {
 
   if (isPending) {
     return (
-      <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-zinc-800 bg-background backdrop-blur-xl">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
           <div className="text-white"><Spinner /></div>
         </div>
@@ -54,7 +54,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-zinc-800 bg-background text-foreground backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
 
         {/* Logo */}
@@ -82,7 +82,7 @@ export default function Navbar() {
               <Link
                 key={item.id}
                 href={item.href}
-                className={`flex items-center gap-2 font-medium transition ${isActive ? "text-blue-500" : "text-zinc-300"
+                className={`flex items-center gap-2 font-medium transition ${isActive ? "text-blue-500" : "text-foreground"
                   }`}
               >
                 <Icon className="size-4" />
@@ -94,6 +94,9 @@ export default function Navbar() {
 
         {/* Auth */}
         <div className="hidden md:flex">
+          <div className=" flex items-center text-center mr-2">
+            <ThemeToggle />
+            </div>
           {!isLoggedIn ? (
             <div className="flex items-center gap-3">
               <Link
@@ -114,14 +117,23 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 hover:bg-zinc-800"
+                className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-background px-3 py-2 hover:bg-zinc-800"
               >
-                <img
-                  src={user?.image || "/avatar.png"}
-                  className="h-8 w-8 rounded-full object-cover"
-                />
+                <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center bg-violet-600 text-white font-semibold">
+                  {user?.image ? (
+                    <Image
+                      src={user.image}
+                      alt={user?.name || "User Avatar"}
+                      width={35}
+                      height={35}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    user?.name?.charAt(0).toUpperCase()
+                  )}
+                </div>
 
-                <span className="text-white">
+                <span className="text-foreground">
                   {user?.name}
                 </span>
 
@@ -129,7 +141,7 @@ export default function Navbar() {
               </button>
 
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-zinc-800 bg-zinc-900 shadow-xl">
+                <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-zinc-800 bg-zinc-800 shadow-xl">
                   <Link
                     href="/dashboard/vendor/profile"
                     className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:bg-zinc-800"
@@ -171,6 +183,7 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="border-t border-zinc-800 bg-zinc-950 md:hidden">
           <div className="space-y-2 p-4">
+            <ThemeToggle />
 
             {navLinks.map((item) => {
               const Icon = item.icon;

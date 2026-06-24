@@ -136,7 +136,7 @@ export default function TicketDetailsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-900 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-6">
 
       <div className="w-full max-w-6xl overflow-hidden rounded-3xl shadow-2xl border border-white/10 backdrop-blur-xl bg-white/80 grid md:grid-cols-2">
 

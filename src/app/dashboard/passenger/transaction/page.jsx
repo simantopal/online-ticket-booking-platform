@@ -27,7 +27,7 @@ export default function TransactionPage() {
   }, [session?.user?.email]);
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-6 text-white">
+    <div className="min-h-screen bg-background p-6 text-foreground">
       <h1 className="mb-6 text-3xl font-bold">
         Transaction History
       </h1>

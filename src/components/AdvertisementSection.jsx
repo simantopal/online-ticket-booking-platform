@@ -26,15 +26,15 @@ export default function AdvertisementSection() {
   }, []);
 
   return (
-    <section className="bg-zinc-950 py-16">
+    <section className="bg-background text-foreground py-16">
       <div className="container mx-auto px-4">
 
         {/* Header */}
         <div className="mb-10 text-center">
-          <h2 className="text-4xl font-bold text-white">
+          <h2 className="text-4xl font-bold text-foreground">
             Featured Tickets
           </h2>
-          <p className="mt-2 text-zinc-400">
+          <p className="mt-2 text-zinc-500">
             Explore our handpicked top travel options
           </p>
         </div>
@@ -129,7 +129,7 @@ export default function AdvertisementSection() {
         {/* Footer */}
         <div className="mt-10 text-center">
           <Link href="/tickets">
-            <button className="rounded-full border border-zinc-700 px-8 py-3 text-white transition hover:border-indigo-500 hover:bg-indigo-600">
+            <button className="rounded-full border border-zinc-700 px-8 py-3 text-foreground transition hover:border-indigo-500 hover:bg-indigo-600">
               View All Tickets →
             </button>
           </Link>

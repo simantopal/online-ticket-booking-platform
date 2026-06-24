@@ -7,7 +7,7 @@ export function PopularRoutes() {
   ];
 
   return (
-    <section className="py-16 px-4 md:px-10 bg-zinc-950">
+    <section className="py-16 px-4 md:px-10 bg-background">
       <div className="max-w-7xl mx-auto">
         {/* <div className="flex mb-10"> */}
           <div className="items-center text-center justify-center mb-10">
@@ -24,7 +24,7 @@ export function PopularRoutes() {
           {routes.map((route, idx) => (
             <div
               key={idx}
-              className="group relative rounded-2xl border bg-zinc-900 p-6 shadow-sm
+              className="group relative rounded-2xl border bg-gray-900 p-6 shadow-sm
               hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
               {/* Background glow */}
@@ -37,17 +37,17 @@ export function PopularRoutes() {
 
               {/* Route */}
               <div className="relative mt-4">
-                <p className="text-xs text-gray-400">From</p>
-                <h3 className="font-semibold text-lg">{route.from}</h3>
+                <p className="text-xs text-white">From</p>
+                <h3 className="font-semibold text-lg text-white">{route.from}</h3>
 
-                <div className="my-3 flex items-center gap-2 text-gray-400 text-sm">
+                <div className="my-3 flex items-center gap-2 text-white text-sm">
                   <span className="h-px flex-1 bg-gray-200" />
                   <span>→</span>
                   <span className="h-px flex-1 bg-gray-200" />
                 </div>
 
-                <p className="text-xs text-gray-400">To</p>
-                <h3 className="font-semibold text-lg">{route.to}</h3>
+                <p className="text-xs text-white">To</p>
+                <h3 className="font-semibold text-lg text-white">{route.to}</h3>
               </div>
 
               {/* Price */}

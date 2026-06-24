@@ -77,12 +77,12 @@ export default function RevenuePage() {
     ];
 
     return (
-        <div className="p-8 space-y-10 bg-zinc-950 min-h-screen text-white">
+        <div className="p-8 space-y-10 bg-background min-h-screen text-foreground">
 
             {/* HEADER */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold text-white">
+                    <h2 className="text-3xl font-bold text-foreground">
                         Vendor Revenue Overview
                     </h2>
                     <p className="text-gray-400 mt-1">
@@ -122,11 +122,11 @@ export default function RevenuePage() {
 
                 {/* Card 3 */}
                 <div className="p-6 rounded-2xl bg-gradient-to-r from-green-500/20 to-emerald-600/20 border border-green-500/30 shadow-lg">
-                    <p className="text-sm text-green-300">Total Revenue</p>
+                    <p className="text-sm text-green-500">Total Revenue</p>
                     <h3 className="text-3xl font-bold text-green-400 mt-2">
                         {data.totalRevenue} BDT
                     </h3>
-                    <p className="text-xs text-green-200/70 mt-1">
+                    <p className="text-xs text-green-300/70 mt-1">
                         Earnings from paid bookings
                     </p>
                 </div>

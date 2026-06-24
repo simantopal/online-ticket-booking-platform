@@ -58,7 +58,7 @@ const RequestedBookingsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white p-4 md:p-6">
+    <div className="min-h-screen bg-bg-background text-foreground p-4 md:p-6">
 
       <h1 className="text-2xl md:text-3xl font-bold mb-6">
         Requested Bookings
@@ -68,7 +68,7 @@ const RequestedBookingsPage = () => {
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left border border-zinc-800">
 
-          <thead className="bg-zinc-900">
+          <thead className="bg-background">
             <tr>
               <th className="p-3">User</th>
               <th className="p-3">Ticket</th>

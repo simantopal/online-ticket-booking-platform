@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function Footer() {
     return (
-        <footer className="border-t border-zinc-800 bg-zinc-950 text-zinc-300">
+        <footer className="border-t border-zinc-800 bg-background">
             <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
                 <div className="grid grid-cols-1 gap-10 text-center md:grid-cols-2 md:text-left lg:grid-cols-4">
 
@@ -96,7 +96,7 @@ export default function Footer() {
                             Payment Methods
                         </h3>
 
-                        <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+                        <div className="rounded-xl border border-zinc-800 bg-gray-900 p-4">
                             <p className="font-medium text-white">
                                 Stripe
                             </p>

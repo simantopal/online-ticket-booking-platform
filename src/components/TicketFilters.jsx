@@ -13,7 +13,7 @@ export default function TicketFilters({ filters, setFilters }) {
         placeholder="From"
         value={filters.from}
         onChange={handleChange}
-        className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3"
+        className="rounded-xl border border-zinc-700 bg-background px-4 py-3"
       />
 
       <input
@@ -21,14 +21,14 @@ export default function TicketFilters({ filters, setFilters }) {
         placeholder="To"
         value={filters.to}
         onChange={handleChange}
-        className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3"
+        className="rounded-xl border border-zinc-700 bg-background px-4 py-3"
       />
 
       <select
         name="transportType"
         value={filters.transportType}
         onChange={handleChange}
-        className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3"
+        className="rounded-xl border border-zinc-700 bg-background px-4 py-3"
       >
         <option value="">All Transport Type</option>
         <option value="Bus">Bus</option>
@@ -41,7 +41,7 @@ export default function TicketFilters({ filters, setFilters }) {
         name="sort"
         value={filters.sort}
         onChange={handleChange}
-        className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3"
+        className="rounded-xl border border-zinc-700 bg-background px-4 py-3"
       >
         <option value="">Sort By Price</option>
         <option value="asc">Low → High</option>
