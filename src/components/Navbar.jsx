@@ -3,20 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-
-import {
-  Bars,
-  Xmark,
-  House,
-  Ticket,
-  Person,
-  ArrowRightFromSquare,
-  ChevronDown,
-  Rectangles4,
-} from "@gravity-ui/icons";
-
+import { Bars, Xmark, House, Ticket, Person, ArrowRightFromSquare, ChevronDown, Rectangles4,} from "@gravity-ui/icons";
 import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
+import { Spinner } from "@heroui/react";
+
+
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -34,7 +26,7 @@ export default function Navbar() {
     return (
       <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-xl">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
-          <div className="text-white">Loading...</div>
+          <div className="text-white"><Spinner /></div>
         </div>
       </header>
     );
@@ -72,7 +64,7 @@ export default function Navbar() {
             alt="TicketBari Logo"
             width={150}
             height={100}
-            className="object-contain"
+            className="h-15 w-auto object-contain"
           />
         </Link>
 

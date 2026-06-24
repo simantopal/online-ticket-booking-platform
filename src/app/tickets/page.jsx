@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { getAllTickets } from "@/lib/api/tickets";
 import TicketFilters from "@/components/TicketFilters";
+import Image from "next/image";
+import { Spinner } from "@heroui/react";
 
 export default function AllTicketsPage() {
   const [tickets, setTickets] = useState([]);
@@ -16,6 +18,10 @@ export default function AllTicketsPage() {
     transportType: "",
     sort: "",
   });
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const ticketsPerPage = 6;
 
   const router = useRouter();
   const { data: session, isPending } = useSession();
@@ -42,12 +48,8 @@ export default function AllTicketsPage() {
     .filter((ticket) => ticket.status === "approved")
     .filter(
       (ticket) =>
-        ticket.from
-          ?.toLowerCase()
-          .includes(filters.from.toLowerCase()) &&
-        ticket.to
-          ?.toLowerCase()
-          .includes(filters.to.toLowerCase()) &&
+        ticket.from?.toLowerCase().includes(filters.from.toLowerCase()) &&
+        ticket.to?.toLowerCase().includes(filters.to.toLowerCase()) &&
         (!filters.transportType ||
           ticket.transportType === filters.transportType)
     )
@@ -58,6 +60,24 @@ export default function AllTicketsPage() {
           ? b.price - a.price
           : 0
     );
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
+  // Pagination Logic
+  const totalPages = Math.ceil(
+    filteredTickets.length / ticketsPerPage
+  );
+
+  const startIndex = (currentPage - 1) * ticketsPerPage;
+  const endIndex = startIndex + ticketsPerPage;
+
+  const paginatedTickets = filteredTickets.slice(
+    startIndex,
+    endIndex
+  );
 
   // Navigation
   const handleClick = (id) => {
@@ -75,7 +95,7 @@ export default function AllTicketsPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-zinc-950 text-white">
-        Loading tickets...
+        <Spinner /> Loading tickets...
       </div>
     );
   }
@@ -99,8 +119,8 @@ export default function AllTicketsPage() {
 
         {/* Cards */}
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {filteredTickets.length > 0 ? (
-            filteredTickets.map((ticket) => (
+          {paginatedTickets.length > 0 ? (
+            paginatedTickets.map((ticket) => (
               <div
                 key={ticket._id}
                 className="flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition hover:border-indigo-500"
@@ -108,9 +128,12 @@ export default function AllTicketsPage() {
                 {/* Image */}
                 <div className="relative h-56">
                   {ticket.image ? (
-                    <img
+                    <Image
                       src={ticket.image}
                       alt={ticket.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw,
+                              (max-width: 1280px) 50vw, 33vw"
                       className="h-full w-full object-cover"
                     />
                   ) : (
@@ -172,7 +195,7 @@ export default function AllTicketsPage() {
                     ))}
                   </div>
 
-                  {/* Button Always Bottom */}
+                  {/* Button */}
                   <div className="mt-auto pt-6">
                     <button
                       onClick={() => handleClick(ticket._id)}
@@ -190,6 +213,46 @@ export default function AllTicketsPage() {
             </div>
           )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-2">
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.max(prev - 1, 1))
+              }
+              disabled={currentPage === 1}
+              className="rounded-xl border border-zinc-700 px-4 py-2 text-sm transition hover:border-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Prev
+            </button>
+
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentPage(index + 1)}
+                className={`rounded-xl px-4 py-2 text-sm transition ${currentPage === index + 1
+                  ? "bg-indigo-600 text-white"
+                  : "border border-zinc-700 hover:border-indigo-500"
+                  }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+
+            <button
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  Math.min(prev + 1, totalPages)
+                )
+              }
+              disabled={currentPage === totalPages}
+              className="rounded-xl border border-zinc-700 px-4 py-2 text-sm transition hover:border-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

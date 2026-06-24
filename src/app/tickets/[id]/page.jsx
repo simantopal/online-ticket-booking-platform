@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import BookingModal from "@/components/BookingModal";
+import Image from "next/image";
+import { Spinner } from "@heroui/react";
 
 export default function TicketDetailsPage() {
   const { id } = useParams();
@@ -25,7 +27,6 @@ export default function TicketDetailsPage() {
     }
   }, [session, isPending, router]);
 
-  // FETCH TICKET
   useEffect(() => {
     const fetchTicket = async () => {
       if (!id) return;
@@ -36,7 +37,6 @@ export default function TicketDetailsPage() {
         const res = await fetch(
           `http://localhost:5000/api/tickets/${id}`
         );
-
         const data = await res.json();
         setTicket(data);
       } catch (err) {
@@ -45,7 +45,6 @@ export default function TicketDetailsPage() {
         setLoadingTicket(false);
       }
     };
-
     fetchTicket();
   }, [id]);
 
@@ -79,7 +78,7 @@ export default function TicketDetailsPage() {
   if (isPending || loadingTicket) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-950 via-black to-zinc-900 text-white">
-        Loading...
+        <Spinner />
       </div>
     );
   }
@@ -88,12 +87,9 @@ export default function TicketDetailsPage() {
 
   const isExpired =
     new Date(ticket.departureDateTime) < new Date();
-
   const isSoldOut = ticket.quantity === 0;
-
   const disabled = isExpired || isSoldOut;
 
-  // ✅ FIXED BOOKING FUNCTION
   const handleBooking = async (data) => {
     try {
       const res = await fetch("http://localhost:5000/api/bookings", {
@@ -116,7 +112,6 @@ export default function TicketDetailsPage() {
         return;
       }
 
-      // 🔥 UPDATE UI INSTANTLY
       setTicket((prev) => ({
         ...prev,
         quantity: result.remainingTickets,
@@ -137,21 +132,22 @@ export default function TicketDetailsPage() {
       alert("Only passengers can book tickets");
       return;
     }
-
     setOpen(true);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-900 flex items-center justify-center p-6">
 
-      {/* CARD */}
       <div className="w-full max-w-6xl overflow-hidden rounded-3xl shadow-2xl border border-white/10 backdrop-blur-xl bg-white/80 grid md:grid-cols-2">
 
-        {/* IMAGE */}
         <div className="relative min-h-125">
-          <img
+          <Image
             src={ticket.image}
             alt={ticket.title}
+            fill
+            loading="eager"
+            sizes="(max-width: 768px) 100vw,
+                   (max-width: 1280px) 50vw, 33vw"
             className="h-full w-full object-cover"
           />
 
@@ -160,18 +156,14 @@ export default function TicketDetailsPage() {
           </div>
         </div>
 
-        {/* CONTENT */}
         <div className="p-8 text-black">
-
           <h1 className="text-3xl font-bold">
             {ticket.title}
           </h1>
-
           <p className="mt-2 text-gray-600">
             {ticket.from} → {ticket.to}
           </p>
 
-          {/* COUNTDOWN */}
           <div className="mt-6 p-4 rounded-xl bg-gray-100 border">
             <p className="text-sm text-gray-500 mb-2">
               Departure Countdown
@@ -189,7 +181,6 @@ export default function TicketDetailsPage() {
             )}
           </div>
 
-          {/* INFO */}
           <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
             <div className="p-3 bg-gray-100 border rounded-xl">
               <p className="text-gray-500">Price</p>
@@ -209,12 +200,10 @@ export default function TicketDetailsPage() {
             </div>
           </div>
 
-          {/* PERKS */}
           <div className="mt-6">
             <p className="text-gray-600 font-medium mb-2">
               Included Perks
             </p>
-
             <div className="flex flex-wrap gap-2">
               {ticket.perks?.map((perk) => (
                 <span
@@ -226,16 +215,13 @@ export default function TicketDetailsPage() {
               ))}
             </div>
           </div>
-
-          {/* BUTTON */}
           <button
             disabled={disabled}
             onClick={handleOpenBooking}
-            className={`mt-8 w-full py-3 rounded-xl font-semibold text-white transition ${
-              disabled
+            className={`mt-8 w-full py-3 rounded-xl font-semibold text-white transition ${disabled
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-gradient-to-r from-green-500 to-blue-600 hover:scale-[1.02]"
-            }`}
+              }`}
           >
             {disabled
               ? isExpired
@@ -246,7 +232,6 @@ export default function TicketDetailsPage() {
         </div>
       </div>
 
-      {/* MODAL */}
       {open && (
         <BookingModal
           open={open}

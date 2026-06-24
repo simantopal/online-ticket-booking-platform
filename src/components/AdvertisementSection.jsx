@@ -67,6 +67,8 @@ export default function AdvertisementSection() {
                     src={ticket.image || "/placeholder.jpg"}
                     alt={ticket.title || "Ticket"}
                     fill
+                    sizes="(max-width: 768px) 100vw,
+                            (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"
                     onError={(e) => {
                       e.currentTarget.src = "/placeholder.jpg";

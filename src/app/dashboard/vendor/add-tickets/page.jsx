@@ -5,7 +5,7 @@ import { useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { addTicket } from "@/lib/actions/tickets";
 import { toast } from "react-toastify";
-import { redirect } from "next/navigation";
+import { Spinner } from "@heroui/react";
 
 const availablePerks = [ "AC", "Breakfast", "WiFi",  "Charging Port", "Window Seat", "Extra Luggage",];
 
@@ -27,7 +27,6 @@ export default function AddTicketPage() {
                     const foundUser = data.find(
                         (u) => u.email === user.email
                     );
-
                     setCurrentUser(foundUser);
                 });
         }
@@ -36,7 +35,7 @@ export default function AddTicketPage() {
     if (isPending) {
         return (
             <div className="flex h-64 items-center justify-center">
-                Loading...
+                <Spinner />
             </div>
         );
     }
@@ -56,7 +55,6 @@ export default function AddTicketPage() {
         if (!file) return;
 
         setImagePreview(URL.createObjectURL(file));
-
         try {
             setUploading(true);
             const formData = new FormData();
@@ -82,7 +80,6 @@ export default function AddTicketPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const form = e.target;
 
         const ticketData = {
@@ -100,7 +97,6 @@ export default function AddTicketPage() {
             status: "Pending",
             createdAt: new Date(),
         };
-
         const res = await addTicket(ticketData);
         if (res.insertedId) {
             toast.success("Ticket Add successfully");
@@ -113,17 +109,9 @@ export default function AddTicketPage() {
         return (
             <div className="flex min-h-[60vh] items-center justify-center">
                 <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-8 text-center">
-                    <h2 className="text-2xl font-bold text-red-500">
-                        Fraud Vendor
-                    </h2>
-
-                    <p className="mt-3 text-zinc-300">
-                        Your account has been marked as fraud.
-                    </p>
-
-                    <p className="mt-2 text-zinc-400">
-                        Fraud vendors are not allowed to add tickets.
-                    </p>
+                    <h2 className="text-2xl font-bold text-red-500">Fraud Vendor</h2>
+                    <p className="mt-3 text-zinc-300">Your account has been marked as fraud.</p>
+                    <p className="mt-2 text-zinc-400">Fraud vendors are not allowed to add tickets.</p>
                 </div>
             </div>
         );
@@ -131,32 +119,20 @@ export default function AddTicketPage() {
 
     return (
         <div className="mx-auto max-w-5xl my-10">
-            {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white">
-                    Add Ticket
-                </h1>
-                <p className="mt-2 text-zinc-400">
-                    Create a new ticket listing for customers.
-                </p>
+                <h1 className="text-3xl font-bold text-white">Add Ticket</h1>
+                <p className="mt-2 text-zinc-400">Create a new ticket listing for customers.</p>
             </div>
 
             <form
                 onSubmit={handleSubmit}
                 className="space-y-8 rounded-3xl border border-zinc-800 bg-zinc-900 p-8"
             >
-                {/* Ticket Information */}
                 <div>
-                    <h2 className="mb-5 text-lg font-semibold text-white">
-                        Ticket Information
-                    </h2>
-
+                    <h2 className="mb-5 text-lg font-semibold text-white">Ticket Information</h2>
                     <div className="space-y-5">
                         <div>
-                            <label className="mb-2 block text-sm font-medium text-zinc-300">
-                                Ticket Title
-                            </label>
-
+                            <label className="mb-2 block text-sm font-medium text-zinc-300">Ticket Title</label>
                             <input
                                 type="text"
                                 name="title"
@@ -171,7 +147,6 @@ export default function AddTicketPage() {
                                 <label className="mb-2 block text-sm font-medium text-zinc-300">
                                     From (Location)
                                 </label>
-
                                 <input
                                     type="text"
                                     name="from"
@@ -197,9 +172,7 @@ export default function AddTicketPage() {
                         </div>
 
                         <div>
-                            <label className="mb-2 block text-sm font-medium text-zinc-300">
-                                Transport Type
-                            </label>
+                            <label className="mb-2 block text-sm font-medium text-zinc-300">Transport Type</label>
 
                             <select
                                 name="transportType"
@@ -210,13 +183,12 @@ export default function AddTicketPage() {
                                 <option value="Bus">Bus</option>
                                 <option value="Train">Train</option>
                                 <option value="Flight">Flight</option>
-                                <option value="Flight">Launch</option>
+                                <option value="Launch">Launch</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                {/* Pricing & Schedule */}
                 <div>
                     <h2 className="mb-5 text-lg font-semibold text-white">
                         Pricing & Schedule
@@ -268,7 +240,6 @@ export default function AddTicketPage() {
                     </div>
                 </div>
 
-                {/* Perks */}
                 <div>
                     <h2 className="mb-5 text-lg font-semibold text-white">
                         Ticket Perks
@@ -294,7 +265,6 @@ export default function AddTicketPage() {
                     </div>
                 </div>
 
-                {/* Image Upload */}
                 <div>
                     <h2 className="mb-5 text-lg font-semibold text-white">
                         Ticket Image
@@ -328,7 +298,6 @@ export default function AddTicketPage() {
                     </div>
                 </div>
 
-                {/* Vendor Information */}
                 <div>
                     <h2 className="mb-5 text-lg font-semibold text-white">
                         Vendor Information
@@ -363,7 +332,6 @@ export default function AddTicketPage() {
                     </div>
                 </div>
 
-                {/* Submit */}
                 <button
                     type="submit"
                     className="w-full rounded-xl bg-indigo-600 px-6 py-4 font-semibold text-white transition hover:bg-indigo-500"

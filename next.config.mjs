@@ -11,7 +11,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "i.ibb.co.com", // optional (remove if not needed)
+        hostname: "i.ibb.co.com",
       },
     ],
   },
