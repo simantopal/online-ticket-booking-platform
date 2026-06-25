@@ -93,7 +93,7 @@ export default function Navbar() {
         <div className="hidden md:flex">
           <div className=" flex items-center text-center mr-2">
             <ThemeToggle />
-            </div>
+          </div>
           {!isLoggedIn ? (
             <div className="flex items-center gap-3">
               <Link
@@ -118,11 +118,12 @@ export default function Navbar() {
               >
                 <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center bg-violet-600 text-white font-semibold">
                   {user?.image ? (
-                    <Image
-                      src={user.image}
-                      alt={user?.name || "User Avatar"}
+                    <img
+                      src={user?.image}
+                      alt="avatar"
                       width={35}
                       height={35}
+                      referrerPolicy="no-referrer"
                       className="h-full w-full object-cover"
                     />
                   ) : (
