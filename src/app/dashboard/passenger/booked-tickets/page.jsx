@@ -111,7 +111,7 @@ export default function TicketGrid() {
   };
 
   const handlePayment = async (booking) => {
-    const res = await fetch(`${process.env.BETTER_AUTH_URL}/api/checkout_sessions`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/checkout_sessions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
