@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { requireRole } from '@/lib/core/session';
 import React from 'react';
 
