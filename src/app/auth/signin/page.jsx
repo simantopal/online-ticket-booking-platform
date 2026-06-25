@@ -122,14 +122,6 @@ export default function SigninPage() {
               </button>
             </div>
           </div>
-          <div className="flex justify-end">
-            <Link
-              href="/forgot-password"
-              className="text-sm text-indigo-400 hover:underline"
-            >
-              Forgot Password?
-            </Link>
-          </div>
 
           <button
             type="submit"

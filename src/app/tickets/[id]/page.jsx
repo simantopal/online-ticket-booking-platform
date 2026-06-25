@@ -35,7 +35,7 @@ export default function TicketDetailsPage() {
         setLoadingTicket(true);
 
         const res = await fetch(
-          `http://localhost:5000/api/tickets/${id}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets/${id}`
         );
         const data = await res.json();
         setTicket(data);
@@ -92,7 +92,7 @@ export default function TicketDetailsPage() {
 
   const handleBooking = async (data) => {
     try {
-      const res = await fetch("http://localhost:5000/api/bookings", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
