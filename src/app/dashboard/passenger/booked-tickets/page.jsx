@@ -111,9 +111,12 @@ export default function TicketGrid() {
   };
 
   const handlePayment = async (booking) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/checkout_sessions`, {
+  try {
+    const res = await fetch("/api/checkout_sessions", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         amount: booking.totalPrice,
         ticketTitle: booking.ticketTitle,
@@ -125,8 +128,13 @@ export default function TicketGrid() {
 
     if (data.url) {
       window.location.href = data.url;
+    } else {
+      console.log(data);
     }
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <div className="p-6 bg-background min-h-screen text-foreground">
