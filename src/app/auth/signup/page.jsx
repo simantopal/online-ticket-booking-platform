@@ -30,41 +30,41 @@ export default function SignupPage() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    const { error } = await signUp.email({
-      name: form.name,
-      email: form.email,
-      password: form.password,
-      image: form.image,
-      role,
-    });
+    try {
+      const { error } = await signUp.email({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        image: form.image,
+        role,
+      });
 
-    if (error) {
-      toast.error(error.message || "Signup failed");
-      return;
-    }
-
-    toast.success("Account created successfully!");
-
-    setTimeout(() => {
-      if (role === "vendor") {
-        router.push("/dashboard/vendor");
-      } else {
-        router.push("/dashboard/passenger");
+      if (error) {
+        toast.error(error.message || "Signup failed");
+        return;
       }
 
-      router.refresh();
-    }, 1000);
-  } catch (err) {
-    toast.error("Something went wrong");
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
+      toast.success("Account created successfully!");
+
+      setTimeout(() => {
+        if (role === "vendor") {
+          router.push("/dashboard/vendor");
+        } else {
+          router.push("/dashboard/passenger");
+        }
+
+        router.refresh();
+      }, 1000);
+    } catch (err) {
+      toast.error("Something went wrong");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGoogleLogin = async () => {
     try {
@@ -80,7 +80,7 @@ export default function SignupPage() {
 
   return (
     <div className="flex items-center justify-center bg-zinc-950 relative overflow-hidden min-h-screen px-4">
-      
+
       <div className="absolute w-125 h-125 bg-indigo-600/30 blur-3xl rounded-full top-[-25] left-[-25]" />
       <div className="absolute w-100 h-100 bg-purple-600/20 blur-3xl rounded-full bottom-[-25] right-[-25]" />
 
@@ -156,7 +156,7 @@ export default function SignupPage() {
 
           <div className="flex flex-col gap-4">
             <Label className="text-zinc-400">Role</Label>
-            <RadioGroup defaultValue="passenger" name="role" onChange={value => setRole(value)} orientation="horizontal">
+            <RadioGroup defaultValue="passenger" name="role" onValueChange={setRole} orientation="horizontal">
               <Radio value="passenger">
                 <Radio.Content>
                   <Radio.Control>
@@ -172,7 +172,7 @@ export default function SignupPage() {
                   </Radio.Control>
                   Vendor
                 </Radio.Content>
-              </Radio>            
+              </Radio>
             </RadioGroup>
           </div>
 
@@ -217,7 +217,7 @@ export default function SignupPage() {
           </button>
 
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
