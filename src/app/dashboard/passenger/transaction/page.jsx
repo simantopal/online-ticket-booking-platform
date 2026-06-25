@@ -13,7 +13,7 @@ export default function TransactionPage() {
 
     const fetchTransactions = async () => {
       const res = await fetch(
-        `http://localhost:5000/api/bookings?userEmail=${session.user.email}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?userEmail=${session.user.email}`
       );
 
       const data = await res.json();

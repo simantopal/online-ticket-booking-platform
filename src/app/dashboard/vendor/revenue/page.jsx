@@ -32,7 +32,7 @@ export default function RevenuePage() {
             setError("");
 
             const res = await fetch(
-                `http://localhost:5000/api/vendor/revenue?vendorEmail=${email}`,
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/vendor/revenue?vendorEmail=${email}`,
                 { cache: "no-store" }
             );
 

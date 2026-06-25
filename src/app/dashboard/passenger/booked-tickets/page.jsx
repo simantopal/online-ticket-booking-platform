@@ -81,7 +81,7 @@ export default function TicketGrid() {
       vendorId: ticket.vendorId,
     };
 
-    const res = await fetch("http://localhost:5000/api/bookings", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -91,7 +91,7 @@ export default function TicketGrid() {
       alert("Booking Sent to Vendor");
 
       const refresh = await fetch(
-        `http://localhost:5000/api/bookings?userEmail=${session.user.email}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?userEmail=${session.user.email}`
       );
 
       const data = await refresh.json();
@@ -111,7 +111,7 @@ export default function TicketGrid() {
   };
 
   const handlePayment = async (booking) => {
-    const res = await fetch("http://localhost:3000/api/checkout_sessions", {
+    const res = await fetch(`${process.env.BETTER_AUTH_URL}/api/checkout_sessions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

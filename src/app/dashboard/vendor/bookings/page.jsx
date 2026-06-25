@@ -24,7 +24,7 @@ const RequestedBookingsPage = () => {
 
   const updateBookingStatus = async (id, status) => {
     try {
-      await fetch(`http://localhost:5000/api/bookings/${id}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
