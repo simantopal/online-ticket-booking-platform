@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "react-toastify";
 
-/* ---------------- COUNTDOWN ---------------- */
 function Countdown({ date }) {
   const calc = () => {
     const diff = new Date(date).getTime() - Date.now();
@@ -43,7 +42,6 @@ export default function TicketGrid() {
   const [qty, setQty] = useState(1);
 
 
-  /* ---------------- FETCH TICKETS ---------------- */
   useEffect(() => {
     const fetchTickets = async () => {
       const res = await fetch("http://localhost:5000/api/tickets");
@@ -54,7 +52,6 @@ export default function TicketGrid() {
     fetchTickets();
   }, []);
 
-  /* ---------------- FETCH USER BOOKINGS ---------------- */
   useEffect(() => {
     if (!session?.user?.email) return;
 
@@ -73,7 +70,6 @@ export default function TicketGrid() {
     fetchBookings();
   }, [session?.user?.email]);
 
-  /* ---------------- BOOK TICKET ---------------- */
   const bookTicket = async (ticket) => {
     const payload = {
       ticketId: ticket._id,
@@ -147,7 +143,6 @@ export default function TicketGrid() {
             const departure = new Date(t.departureDateTime);
             const isExpired = Date.now() > departure.getTime();
 
-            /* ---------------- FIND USER BOOKING ---------------- */
             const userBooking = bookings.find(
               (b) => String(b.ticketId) === String(t._id)
             );
@@ -185,10 +180,8 @@ export default function TicketGrid() {
                   </div>
                 </div>
 
-                {/* CONTENT */}
                 <div className="p-4 space-y-3">
 
-                  {/* STATUS */}
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-foreground">
                       Booked Qty:{" "}
@@ -196,12 +189,10 @@ export default function TicketGrid() {
                     </span>
                   </div>
 
-                  {/* ROUTE */}
                   <p className="text-sm text-foreground">
                     {t.from} <span className="text-zinc-500">→</span> {t.to}
                   </p>
 
-                  {/* PRICE */}
                   <div className="flex justify-between text-sm">
                     <span className="text-foreground">Price: ৳{t.price}</span>
                     <span className="text-emerald-400 font-semibold">
@@ -209,16 +200,13 @@ export default function TicketGrid() {
                     </span>
                   </div>
 
-                  {/* COUNTDOWN */}
                   {t.status !== "rejected" && (
                     <div className="bg-zinc-800 p-2 rounded-lg text-center">
                       <Countdown date={departure} />
                     </div>
                   )}
 
-                  {/* ---------------- ACTION LOGIC ---------------- */}
 
-                  {/* NOT BOOKED */}
                   {!userBooking && t.status === "pending" && !isExpired && (
                     <button
                       onClick={() => bookTicket(t)}
@@ -227,15 +215,12 @@ export default function TicketGrid() {
                       Book Now
                     </button>
                   )}
-
-                  {/* WAITING */}
                   {userBooking?.status === "pending" && (
                     <p className="text-yellow-400 text-center">
                       Waiting for Vendor Approval...
                     </p>
                   )}
 
-                  {/* ACCEPTED → PAY NOW */}
                   {userBooking?.status === "accepted" && (
                     <button
                       onClick={() => handlePayment(userBooking)}
@@ -255,14 +240,12 @@ export default function TicketGrid() {
                       Paid ✅
                     </button>
                   )}
-                  {/* REJECTED */}
                   {userBooking?.status === "rejected" && (
                     <p className="text-red-500 text-center">
                       Booking Rejected
                     </p>
                   )}
 
-                  {/* EXPIRED */}
                   {t.status === "pending" && isExpired && !userBooking && (
                     <p className="text-red-400 text-center">
                       Booking Closed (Expired)

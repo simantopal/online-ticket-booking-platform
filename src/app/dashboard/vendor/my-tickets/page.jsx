@@ -18,6 +18,8 @@ export default function MyTicketsPage() {
     const loadTickets = async () => {
       if (!user?.email) return;
 
+      setLoading(true);
+
       try {
         const data = await getVendorTickets(user.email);
         setTickets(data);
@@ -32,23 +34,28 @@ export default function MyTicketsPage() {
   }, [user?.email]);
 
   const handleDelete = async (id) => {
-    const confirmDelete = confirm("Are you sure you want to delete this ticket?");
-    if (!confirmDelete) return;
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets/${id}`,
-      {
-        method: "DELETE",
-      }
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this ticket?"
     );
 
-    const data = await res.json();
+    if (!confirmDelete) return;
 
-    if (data.deletedCount > 0) {
-      alert("Ticket deleted successfully");
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-      // UI থেকে remove
+      if (!res.ok) {
+        throw new Error("Delete failed");
+      }
+
       setTickets((prev) => prev.filter((t) => t._id !== id));
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete ticket");
     }
   };
 
@@ -68,9 +75,7 @@ export default function MyTicketsPage() {
   if (isPending || loading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <div className="text-lg text-zinc-400">
-          Loading tickets...
-        </div>
+        <div className="text-lg text-foreground">Loading tickets...</div>
       </div>
     );
   }
@@ -78,11 +83,8 @@ export default function MyTicketsPage() {
   return (
     <div className="container mx-auto my-10">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">
-          My Added Tickets
-        </h1>
-
-        <p className="mt-2 text-zinc-400">
+        <h1 className="text-3xl font-bold text-foreground">My Added Tickets</h1>
+        <p className="mt-2 text-foreground">
           Manage all tickets you have added.
         </p>
       </div>
@@ -92,7 +94,6 @@ export default function MyTicketsPage() {
           <h2 className="text-xl font-semibold text-white">
             No Tickets Found
           </h2>
-
           <p className="mt-2 text-zinc-400">
             You have not added any tickets yet.
           </p>
@@ -100,8 +101,8 @@ export default function MyTicketsPage() {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {tickets.map((ticket) => {
-            const isRejected =
-              ticket.status?.toLowerCase() === "rejected";
+            const status = ticket.status?.toLowerCase();
+            const isRejected = status === "rejected";
 
             return (
               <div
@@ -123,7 +124,6 @@ export default function MyTicketsPage() {
                   )}
                 </div>
 
-                {/* Content */}
                 <div className="p-5">
                   <div className="mb-3 flex items-start justify-between gap-3">
                     <h2 className="text-lg font-semibold text-white">
@@ -135,58 +135,47 @@ export default function MyTicketsPage() {
                         ticket.status
                       )}`}
                     >
-                      {ticket.status
-                        ? ticket.status.charAt(0).toUpperCase() +
-                        ticket.status.slice(1)
+                      {status
+                        ? status.charAt(0).toUpperCase() + status.slice(1)
                         : "Pending"}
                     </span>
                   </div>
 
                   <div className="space-y-2 text-sm">
                     <p className="text-zinc-300">
-                      <span className="text-zinc-500">
-                        Route:
-                      </span>{" "}
+                      <span className="text-zinc-500">Route:</span>{" "}
                       {ticket.from} → {ticket.to}
                     </p>
 
                     <p className="text-zinc-300">
-                      <span className="text-zinc-500">
-                        Transport:
-                      </span>{" "}
+                      <span className="text-zinc-500">Transport:</span>{" "}
                       {ticket.transportType}
                     </p>
 
                     <p className="text-zinc-300">
-                      <span className="text-zinc-500">
-                        Price:
-                      </span>{" "}
-                      ৳{ticket.price}
+                      <span className="text-zinc-500">Price:</span> ৳
+                      {ticket.price}
                     </p>
 
                     <p className="text-zinc-300">
-                      <span className="text-zinc-500">
-                        Quantity:
-                      </span>{" "}
+                      <span className="text-zinc-500">Quantity:</span>{" "}
                       {ticket.quantity}
                     </p>
 
                     <p className="text-zinc-300">
-                      <span className="text-zinc-500">
-                        Departure:
-                      </span>{" "}
+                      <span className="text-zinc-500">Departure:</span>{" "}
                       {ticket.departureDateTime}
                     </p>
                   </div>
 
-                  {/* Actions */}
                   <div className="mt-6 flex gap-3">
                     <Link
                       href={`/dashboard/vendor/my-tickets/${ticket._id}`}
-                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${isRejected
-                        ? "pointer-events-none cursor-not-allowed bg-zinc-800 text-zinc-500"
-                        : "bg-blue-600 text-white hover:bg-blue-500"
-                        }`}
+                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${
+                        isRejected
+                          ? "pointer-events-none cursor-not-allowed bg-zinc-800 text-zinc-500"
+                          : "bg-blue-600 text-white hover:bg-blue-500"
+                      }`}
                     >
                       <Pencil className="h-4 w-4" />
                       Update
@@ -194,11 +183,12 @@ export default function MyTicketsPage() {
 
                     <button
                       onClick={() => handleDelete(ticket._id)}
-                      disabled={ticket.status === "Rejected"}
-                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${ticket.status === "Rejected"
+                      disabled={isRejected}
+                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition ${
+                        isRejected
                           ? "cursor-not-allowed bg-zinc-800 text-zinc-500"
                           : "bg-red-800 text-white hover:bg-red-700"
-                        }`}
+                      }`}
                     >
                       <TrashBin className="h-4 w-4" />
                       Delete
@@ -207,8 +197,8 @@ export default function MyTicketsPage() {
 
                   {isRejected && (
                     <p className="mt-3 text-xs text-red-400">
-                      This ticket was rejected by admin.
-                      Update and delete actions are disabled.
+                      This ticket was rejected by admin. Update and delete
+                      actions are disabled.
                     </p>
                   )}
                 </div>

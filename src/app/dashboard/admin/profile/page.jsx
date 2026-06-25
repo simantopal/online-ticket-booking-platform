@@ -24,7 +24,6 @@ const ProfilePage = () => {
     );
   }
 
-  // handle input change
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -32,7 +31,6 @@ const ProfilePage = () => {
     });
   };
 
-  // update profile
   const handleUpdate = async () => {
     try {
       setUpdating(true);
@@ -68,7 +66,6 @@ const ProfilePage = () => {
   return (
     <div className="mx-auto max-w-5xl my-6 md:my-10 px-4 md:px-0">
 
-  {/* HEADER */}
   <div className="mb-5 md:mb-6">
     <h1 className="text-2xl md:text-3xl font-bold text-base-100">
       My Profile
@@ -78,14 +75,12 @@ const ProfilePage = () => {
     </p>
   </div>
 
-  {/* CARD */}
   <div className="container mx-auto overflow-hidden rounded-2xl md:rounded-3xl border border-zinc-800 bg-background text-foreground">
 
     <div className="h-28 md:h-40 bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600" />
 
     <div className="relative px-4 md:px-8 pb-6 md:pb-8">
 
-      {/* Avatar */}
       <div className="-mt-12 md:-mt-16">
         <img
           src={user?.image || "/avatar.png"}
@@ -94,17 +89,14 @@ const ProfilePage = () => {
         />
       </div>
 
-      {/* Name */}
       <h2 className="text-2xl md:text-3xl font-bold text-foreground mt-3 md:mt-4">
         {user?.name}
       </h2>
 
-      {/* Role */}
       <span className="inline-block mt-2 rounded-full bg-indigo-500/20 px-3 py-1 text-xs md:text-sm text-indigo-400">
         {user?.role || "Vendor"}
       </span>
 
-      {/* DETAILS */}
       <div className="mt-6 md:mt-8 grid gap-3 md:gap-4 md:grid-cols-2">
 
         <div className="p-4 md:p-5 rounded-2xl border border-zinc-800 bg-background">
@@ -129,7 +121,6 @@ const ProfilePage = () => {
 
       </div>
 
-      {/* BUTTON */}
       <button
         onClick={() => setOpen(true)}
         className="mt-6 md:mt-8 w-full md:w-auto rounded-xl bg-indigo-600 px-6 py-3 font-medium text-white hover:bg-indigo-500"
@@ -140,7 +131,6 @@ const ProfilePage = () => {
     </div>
   </div>
 
-  {/* MODAL */}
   {open && (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/60">
 
@@ -150,7 +140,6 @@ const ProfilePage = () => {
           Edit Profile
         </h2>
 
-        {/* NAME */}
         <input
           name="name"
           value={form.name}
@@ -159,7 +148,6 @@ const ProfilePage = () => {
           placeholder="Name"
         />
 
-        {/* IMAGE */}
         <input
           name="image"
           value={form.image}
@@ -168,7 +156,6 @@ const ProfilePage = () => {
           placeholder="Image URL"
         />
 
-        {/* BUTTONS */}
         <div className="flex flex-col md:flex-row gap-3 mt-4">
 
           <button

@@ -7,7 +7,6 @@ export default function ManageUsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // FETCH USERS
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -27,7 +26,6 @@ export default function ManageUsersPage() {
     fetchUsers();
   }, []);
 
-  // ROLE UPDATE
   const updateRole = async (id, role) => {
     try {
       const res = await fetch(
@@ -53,7 +51,6 @@ export default function ManageUsersPage() {
     }
   };
 
-  // MARK / UNDO FRAUD
   const toggleFraud = async (user) => {
     const makeFraud = !user.isFraud;
 
@@ -93,7 +90,6 @@ export default function ManageUsersPage() {
     }
   };
 
-  // LOADING UI
   if (loading) {
     return (
       <div className="text-white p-10">
@@ -103,12 +99,11 @@ export default function ManageUsersPage() {
   }
 
   return (
-    <div className="p-4 md:p-6 text-white">
+    <div className="p-4 md:p-6 text-foreground">
       <h1 className="text-xl md:text-2xl font-bold mb-6">
         Manage Users
       </h1>
 
-      {/* DESKTOP TABLE */}
       <div className="md:block">
         <Table>
           <Table.ScrollContainer>

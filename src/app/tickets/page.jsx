@@ -19,14 +19,12 @@ export default function AllTicketsPage() {
     sort: "",
   });
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const ticketsPerPage = 6;
 
   const router = useRouter();
   const { data: session, isPending } = useSession();
 
-  // Fetch tickets
   useEffect(() => {
     const fetchTickets = async () => {
       try {
@@ -43,7 +41,6 @@ export default function AllTicketsPage() {
     fetchTickets();
   }, []);
 
-  // Filter + Sort
   const filteredTickets = [...tickets]
     .filter((ticket) => ticket.status === "approved")
     .filter(
@@ -61,7 +58,6 @@ export default function AllTicketsPage() {
           : 0
     );
 
-  // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [filters]);
@@ -79,7 +75,6 @@ export default function AllTicketsPage() {
     endIndex
   );
 
-  // Navigation
   const handleClick = (id) => {
     if (isPending) return;
 
@@ -91,7 +86,6 @@ export default function AllTicketsPage() {
     router.push(`/tickets/${id}`);
   };
 
-  // Loading UI
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
@@ -103,7 +97,7 @@ export default function AllTicketsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-7xl px-6 py-12">
-        {/* Header */}
+       
         <div className="mb-10 text-center">
           <h1 className="text-3xl font-bold">All Tickets</h1>
           <p className="mt-2 text-default-500">
@@ -111,13 +105,11 @@ export default function AllTicketsPage() {
           </p>
         </div>
 
-        {/* Filters */}
         <TicketFilters
           filters={filters}
           setFilters={setFilters}
         />
 
-        {/* Cards */}
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {paginatedTickets.length > 0 ? (
             paginatedTickets.map((ticket) => (
@@ -125,7 +117,6 @@ export default function AllTicketsPage() {
                 key={ticket._id}
                 className="flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-background shadow-2xl transition hover:border-indigo-500"
               >
-                {/* Image */}
                 <div className="relative h-56">
                   {ticket.image ? (
                     <Image
@@ -147,34 +138,32 @@ export default function AllTicketsPage() {
                   </span>
                 </div>
 
-                {/* Content */}
                 <div className="flex flex-1 flex-col p-5">
                   <h2 className="mb-2 text-xl font-semibold">
                     {ticket.title}
                   </h2>
 
-                  <p className="mb-4 text-sm text-zinc-400">
+                  <p className="mb-4 text-sm text-foreground">
                     {ticket.from} → {ticket.to}
                   </p>
 
-                  {/* Details */}
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-zinc-400">Price</span>
+                      <span className="text-foreground">Price</span>
                       <span className="font-medium text-green-400">
                         ৳{ticket.price}
                       </span>
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-zinc-400">
+                      <span className="text-foreground">
                         Available Tickets
                       </span>
                       <span>{ticket.quantity}</span>
                     </div>
 
                     <div className="flex justify-between gap-3">
-                      <span className="text-zinc-400">
+                      <span className="text-foreground">
                         Departure
                       </span>
                       <span className="text-right text-xs">
@@ -183,19 +172,17 @@ export default function AllTicketsPage() {
                     </div>
                   </div>
 
-                  {/* Perks */}
                   <div className="mt-4 flex flex-wrap gap-2">
                     {ticket.perks?.map((perk) => (
                       <span
                         key={perk}
-                        className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-300"
+                        className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-foreground"
                       >
                         {perk}
                       </span>
                     ))}
                   </div>
 
-                  {/* Button */}
                   <div className="mt-auto pt-6">
                     <button
                       onClick={() => handleClick(ticket._id)}
@@ -214,7 +201,6 @@ export default function AllTicketsPage() {
           )}
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-12 flex flex-wrap items-center justify-center gap-2">
             <button

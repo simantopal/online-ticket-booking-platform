@@ -10,16 +10,14 @@ export default function Banner() {
         backgroundImage: "url('/banner.png')",
       }}
     >
-      {/* Dark Overlay */}
       <div className="absolute inset-0 bg-zinc-950/80" />
-      {/* Background Glow */}
+      
       <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-indigo-600/20 blur-3xl" />
       <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-20 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 text-center justify-center lg:justify-start lg:text-start">
           
-          {/* Left Content */}
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 text-sm text-indigo-400">
               <Ticket className="size-4" />
@@ -48,7 +46,6 @@ export default function Banner() {
               </button>
             </div>
 
-            {/* Stats */}
             <div className="mt-10 flex flex-wrap gap-8 lg:justify-start lg:text-start justify-center items-center">
               <div>
                 <h3 className="text-3xl font-bold text-white">
@@ -79,7 +76,6 @@ export default function Banner() {
             </div>
           </div>
 
-          {/* Right Search Card */}
           <div>
             <div className="rounded-3xl border border-zinc-800 bg-zinc-900/80 p-6 shadow-2xl backdrop-blur">
               <h3 className="mb-6 text-2xl font-bold text-white">

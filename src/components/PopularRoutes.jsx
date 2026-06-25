@@ -9,7 +9,7 @@ export function PopularRoutes() {
   return (
     <section className="py-16 px-4 md:px-10 bg-background">
       <div className="max-w-7xl mx-auto">
-        {/* <div className="flex mb-10"> */}
+        
           <div className="items-center text-center justify-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
               Popular Routes
@@ -18,7 +18,7 @@ export function PopularRoutes() {
               Explore the most booked travel destinations
             </p>
           </div>
-        {/* </div> */}
+        
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {routes.map((route, idx) => (
@@ -27,15 +27,12 @@ export function PopularRoutes() {
               className="group relative rounded-2xl border bg-gray-900 p-6 shadow-sm
               hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
-              {/* Background glow */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-blue-100 to-transparent" />
 
-              {/* Tag */}
               <span className="relative inline-block text-xs px-3 py-1 rounded-full bg-blue-50 text-blue-600 font-medium">
                 {route.tag}
               </span>
 
-              {/* Route */}
               <div className="relative mt-4">
                 <p className="text-xs text-white">From</p>
                 <h3 className="font-semibold text-lg text-white">{route.from}</h3>
@@ -50,7 +47,6 @@ export function PopularRoutes() {
                 <h3 className="font-semibold text-lg text-white">{route.to}</h3>
               </div>
 
-              {/* Price */}
               <div className="relative mt-5 flex items-center justify-between">
                 <p className="text-blue-600 font-bold text-lg">
                   ৳{route.price}

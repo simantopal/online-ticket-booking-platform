@@ -22,7 +22,6 @@ const RequestedBookingsPage = () => {
     fetchBookings();
   }, []);
 
-  // UPDATE STATUS
   const updateBookingStatus = async (id, status) => {
     try {
       await fetch(`http://localhost:5000/api/bookings/${id}`, {
@@ -31,7 +30,6 @@ const RequestedBookingsPage = () => {
         body: JSON.stringify({ status }),
       });
 
-      // optimistic UI update
       setBookings((prev) =>
         prev.map((b) =>
           b._id === id ? { ...b, status } : b
@@ -42,7 +40,6 @@ const RequestedBookingsPage = () => {
     }
   };
 
-  // SAFE PRICE CALC
   const getTotalPrice = (b) => {
     const price = Number(b.unitPrice || 0);
     const qty = Number(b.quantity || 0);
@@ -64,7 +61,6 @@ const RequestedBookingsPage = () => {
         Requested Bookings
       </h1>
 
-      {/* TABLE */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left border border-zinc-800">
 
@@ -136,15 +132,14 @@ const RequestedBookingsPage = () => {
         </table>
       </div>
 
-      {/* MOBILE */}
       <div className="grid gap-4 md:hidden">
         {bookings.map((b) => (
           <div
             key={b._id}
-            className="border border-zinc-800 rounded-xl p-4 bg-zinc-900"
+            className="border border-zinc-800 rounded-xl p-4 bg-background"
           >
 
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-foreground">
               {b.userEmail}
             </p>
 

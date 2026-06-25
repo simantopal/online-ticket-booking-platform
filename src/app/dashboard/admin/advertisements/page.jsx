@@ -68,7 +68,6 @@ export default function AdvertiseTicketsPage() {
   return (
     <div className="p-6">
 
-      {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">
           Advertise Tickets
@@ -81,12 +80,10 @@ export default function AdvertiseTicketsPage() {
         </span>
       </div>
 
-      {/* TABLE (NEW HEROUI STRUCTURE) */}
       <Table>
         <Table.ScrollContainer>
           <Table.Content aria-label="Advertise tickets table">
 
-            {/* HEADER */}
             <Table.Header>
               <Table.Column isRowHeader>#</Table.Column>
               <Table.Column>Photo</Table.Column>
@@ -99,7 +96,6 @@ export default function AdvertiseTicketsPage() {
               <Table.Column>Action</Table.Column>
             </Table.Header>
 
-            {/* BODY */}
             <Table.Body>
               {tickets.map((ticket, index) => {
                 const disableToggle =

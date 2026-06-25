@@ -80,11 +80,10 @@ export default function SignupPage() {
 
   return (
     <div className="flex items-center justify-center bg-zinc-950 relative overflow-hidden min-h-screen px-4">
-      {/* Glow Background */}
+      
       <div className="absolute w-125 h-125 bg-indigo-600/30 blur-3xl rounded-full top-[-25] left-[-25]" />
       <div className="absolute w-100 h-100 bg-purple-600/20 blur-3xl rounded-full bottom-[-25] right-[-25]" />
 
-      {/* Card */}
       <div className="relative w-full max-w-md p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl">
         <h1 className="text-3xl font-bold text-white text-center">
           Create Account
@@ -96,7 +95,6 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
 
-          {/* Name */}
           <div>
             <label className="text-sm text-zinc-400">Full Name</label>
             <input
@@ -109,7 +107,6 @@ export default function SignupPage() {
             />
           </div>
 
-          {/* Image */}
           <div>
             <label className="text-sm text-zinc-400">Profile Image</label>
             <input
@@ -121,7 +118,6 @@ export default function SignupPage() {
             />
           </div>
 
-          {/* Email */}
           <div>
             <label className="text-sm text-zinc-400">Email Address</label>
             <input
@@ -135,7 +131,6 @@ export default function SignupPage() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="text-sm text-zinc-400">Password</label>
 
@@ -155,7 +150,6 @@ export default function SignupPage() {
                 onClick={() => setShowPass(!showPass)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
               >
-                {/* {showPass ? <EyeSlash /> : <Eye />} */}
               </button>
             </div>
           </div>
@@ -182,7 +176,6 @@ export default function SignupPage() {
             </RadioGroup>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -198,7 +191,6 @@ export default function SignupPage() {
             )}
           </button>
 
-          {/* Footer */}
           <p className="text-center text-sm text-zinc-400">
             Already have an account?{" "}
             <Link
@@ -209,14 +201,12 @@ export default function SignupPage() {
             </Link>
           </p>
 
-          {/* Divider */}
           <div className="flex items-center gap-3">
             <div className="h-px flex-1 bg-white/10" />
             <span className="text-xs text-zinc-500">OR</span>
             <div className="h-px flex-1 bg-white/10" />
           </div>
 
-          {/* Google */}
           <button
             type="button"
             onClick={handleGoogleLogin}

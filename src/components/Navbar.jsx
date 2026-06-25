@@ -57,7 +57,6 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-zinc-800 bg-background text-foreground backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
 
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-white">
           <Image
             src="/logo.png"
@@ -68,7 +67,6 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Nav */}
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((item) => {
             const Icon = item.icon;
@@ -92,7 +90,6 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Auth */}
         <div className="hidden md:flex">
           <div className=" flex items-center text-center mr-2">
             <ThemeToggle />
@@ -117,7 +114,7 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-background px-3 py-2 hover:bg-zinc-800"
+                className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-background px-3 py-2 hover:bg-zinc-500"
               >
                 <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center bg-violet-600 text-white font-semibold">
                   {user?.image ? (
@@ -169,7 +166,7 @@ export default function Navbar() {
         {/* Mobile */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-white"
+          className="md:hidden text-foreground"
         >
           {mobileOpen ? (
             <Xmark className="size-6" />
@@ -179,9 +176,8 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-zinc-800 bg-zinc-950 md:hidden">
+        <div className="border-t border-zinc-800 bg-background md:hidden">
           <div className="space-y-2 p-4">
             <ThemeToggle />
 
@@ -198,7 +194,7 @@ export default function Navbar() {
                   key={item.id}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 rounded-xl px-4 py-3 ${isActive ? "text-blue-500" : "text-zinc-300"
+                  className={`flex items-center gap-3 rounded-xl px-4 py-3 ${isActive ? "text-blue-500" : "text-foreground"
                     }`}
                 >
                   <Icon className="size-4" />

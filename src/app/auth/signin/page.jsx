@@ -70,11 +70,11 @@ export default function SigninPage() {
 
   return (
     <div className="flex items-center justify-center bg-zinc-950 relative overflow-hidden min-h-screen px-4">
-      {/* Glow Background */}
+    
       <div className="absolute w-125 h-125 bg-indigo-600/30 blur-3xl rounded-full top-[-25] left-[-25]" />
       <div className="absolute w-100 h-100 bg-purple-600/20 blur-3xl rounded-full bottom-[-25] right-[-25]" />
 
-      {/* Card */}
+      
       <div className="relative w-full max-w-md p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl">
         <h1 className="text-3xl font-bold text-white text-center">
           Welcome Back
@@ -86,7 +86,6 @@ export default function SigninPage() {
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
 
-          {/* Email */}
           <div>
             <label className="text-sm text-zinc-400">Email Address</label>
             <input
@@ -100,7 +99,6 @@ export default function SigninPage() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="text-sm text-zinc-400">Password</label>
 
@@ -124,8 +122,6 @@ export default function SigninPage() {
               </button>
             </div>
           </div>
-
-          {/* Forgot Password */}
           <div className="flex justify-end">
             <Link
               href="/forgot-password"
@@ -135,7 +131,6 @@ export default function SigninPage() {
             </Link>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -151,7 +146,6 @@ export default function SigninPage() {
             )}
           </button>
 
-          {/* Footer */}
           <p className="text-center text-sm text-zinc-400">
             Do not have an account?{" "}
             <Link
@@ -162,14 +156,12 @@ export default function SigninPage() {
             </Link>
           </p>
 
-          {/* Divider */}
           <div className="flex items-center gap-3">
             <div className="h-px flex-1 bg-white/10" />
             <span className="text-xs text-zinc-500">OR</span>
             <div className="h-px flex-1 bg-white/10" />
           </div>
 
-          {/* Google Sign In */}
           <button
             type="button"
             onClick={handleGoogleLogin}

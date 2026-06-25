@@ -29,7 +29,6 @@ export default function AdvertisementSection() {
     <section className="bg-background text-foreground py-16">
       <div className="container mx-auto px-4">
 
-        {/* Header */}
         <div className="mb-10 text-center">
           <h2 className="text-4xl font-bold text-foreground">
             Featured Tickets
@@ -39,21 +38,18 @@ export default function AdvertisementSection() {
           </p>
         </div>
 
-        {/* Loading */}
         {loading && (
           <div className="text-center text-zinc-400">
             Loading advertisements...
           </div>
         )}
 
-        {/* Empty state */}
         {!loading && tickets.length === 0 && (
           <div className="text-center text-zinc-500">
             No featured tickets available
           </div>
         )}
 
-        {/* Cards */}
         {!loading && tickets.length > 0 && (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {tickets.map((ticket) => (
@@ -80,7 +76,6 @@ export default function AdvertisementSection() {
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className="p-5 text-white">
                   <h3 className="mb-4 text-2xl font-bold">
                     {ticket.title}
@@ -96,7 +91,6 @@ export default function AdvertisementSection() {
                     </p>
                   </div>
 
-                  {/* Perks */}
                   <div className="mb-5 flex flex-wrap gap-2">
                     {ticket?.perks?.length > 0 ? (
                       ticket.perks.map((perk, index) => (
@@ -114,7 +108,6 @@ export default function AdvertisementSection() {
                     )}
                   </div>
 
-                  {/* Button */}
                   <Link href={`/tickets/${ticket._id}`}>
                     <button className="w-full rounded-xl bg-indigo-600 py-3 font-medium text-white transition hover:bg-indigo-500">
                       See Details
@@ -126,7 +119,6 @@ export default function AdvertisementSection() {
           </div>
         )}
 
-        {/* Footer */}
         <div className="mt-10 text-center">
           <Link href="/tickets">
             <button className="rounded-full border border-zinc-700 px-8 py-3 text-foreground transition hover:border-indigo-500 hover:bg-indigo-600">
