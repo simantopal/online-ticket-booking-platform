@@ -44,7 +44,7 @@ export default function TicketGrid() {
 
   useEffect(() => {
     const fetchTickets = async () => {
-      const res = await fetch("http://localhost:5000/api/tickets");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets`);
       const data = await res.json();
       setTickets(data);
     };
@@ -58,7 +58,7 @@ export default function TicketGrid() {
     const fetchBookings = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/bookings?userEmail=${session.user.email}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?userEmail=${session.user.email}`
         );
         const data = await res.json();
         setBookings(data || []);
